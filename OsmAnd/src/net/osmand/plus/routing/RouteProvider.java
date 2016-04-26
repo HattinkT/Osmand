@@ -528,8 +528,19 @@ public class RouteProvider {
 		if (startLoc != null) {
 			for (int i = 0; i < route.size(); i++) {
 				float d = route.get(i).distanceTo(startLoc);
+				float bStart = route.get(i).bearingTo(startLoc);
+				float bNext = bStart + 180f;
+				if (i < route.size() - 1) {
+					bNext = route.get(i).bearingTo(route.get(i + 1));
+				}
 				if (d < minDist) {
-					start = i;
+					double diff = MapUtils.degreesDiff(bStart, bNext);
+					if (Math.abs(diff) < 90f) {
+						start = i + 1;
+					}
+					else {
+						start = i;
+					}
 					minDist = d;
 				}
 			}
@@ -543,10 +554,20 @@ public class RouteProvider {
 		// get in reverse order taking into account ways with cycle
 		for (int i = route.size() - 1; i >= start; i--) {
 			float d = route.get(i).distanceTo(l);
+			float bStart = route.get(i).bearingTo(startLoc);
+			float bNext = bStart + 180f;
+			if (i > start) {
+				bNext = route.get(i).bearingTo(route.get(i - 1));
+			}
 			if (d < minDist) {
-				end = i + 1;
-				// slightly modify to allow last point to be added
-				minDist = d - 40;
+				double diff = MapUtils.degreesDiff(bStart, bNext);
+				if (Math.abs(diff) < 90f) {
+					end = i;
+				}
+				else {
+					end = i + 1;
+				}
+				minDist = d;
 			}
 		}
 		ArrayList<Location> sublist = new ArrayList<Location>(route.subList(start, end));
