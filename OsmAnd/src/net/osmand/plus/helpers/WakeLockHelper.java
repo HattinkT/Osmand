@@ -63,11 +63,21 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 		}
 	}
 
+	private void ScheduleReleaseWakeLocks() {
+		OsmandSettings settings = app.getSettings();
+		final Integer screenPowerSave = settings.WAKE_ON_VOICE_INT.get();
+		if (screenPowerSave > 0) {
+			uiHandler.removeCallbacks(releaseWakeLocksRunnable);
+			uiHandler.postDelayed(releaseWakeLocksRunnable, screenPowerSave * 1000L);
+		}
+	}
+
 	public void onStart(Activity a) {
 		this.active = true;
 		if (wakeLock == null) {
 			VoiceRouter voiceRouter = app.getRoutingHelper().getVoiceRouter();
 			voiceRouter.removeVoiceMessageListener(this);
+			ScheduleReleaseWakeLocks();
 		}		
 	}
 
@@ -79,14 +89,16 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 			voiceRouter.addVoiceMessageListener(this);
 		}
 	}
+
+	public void onUserInteraction() {
+		ScheduleReleaseWakeLocks();
+	}
 	
 	@Override
 	public void onVoiceMessage() {
 		OsmandSettings settings = app.getSettings();
 		final Integer screenPowerSave = settings.WAKE_ON_VOICE_INT.get();
 		if (screenPowerSave > 0) {
-			uiHandler.removeCallbacks(releaseWakeLocksRunnable);
-
 			if (!active && wakeLock == null) {
 				PowerManager pm = (PowerManager) app.getSystemService(Context.POWER_SERVICE);
 				wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
@@ -95,8 +107,7 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 				wakeLock.acquire();
 			}
 
-			uiHandler.postDelayed(releaseWakeLocksRunnable,
-					screenPowerSave * 1000L);
+			ScheduleReleaseWakeLocks();
 		}
 	}
 	
