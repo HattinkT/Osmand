@@ -1181,6 +1181,12 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 		getMyApplication().getNotificationHelper().showNotifications();
 	}
 
+	@Override
+	public void onUserInteraction() {
+		super.onUserInteraction();
+		wakeLockHelper.onUserInteraction();
+	}
+
 	protected void setProgressDlg(Dialog progressDlg) {
 		this.progressDlg = progressDlg;
 	}
