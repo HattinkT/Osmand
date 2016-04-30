@@ -645,7 +645,7 @@ public class RoutingHelper {
 						evalWaitInterval = 3000;
 					} else {
 						evalWaitInterval = Math.max(3000, evalWaitInterval * 3 / 2);
-						evalWaitInterval = Math.min(evalWaitInterval, 120000);
+						evalWaitInterval = Math.min(evalWaitInterval, 15000);
 					}
 					
 				}
@@ -863,7 +863,7 @@ public class RoutingHelper {
 					route = res;
 				} else {
 					evalWaitInterval = evalWaitInterval * 3 / 2;
-					evalWaitInterval = Math.min(evalWaitInterval, 120000);
+					evalWaitInterval = Math.min(evalWaitInterval, 15000);
 				}
 				currentRunningJob = null;
 			}
