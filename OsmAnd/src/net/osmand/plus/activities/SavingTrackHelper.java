@@ -59,9 +59,11 @@ public class SavingTrackHelper extends SQLiteOpenHelper {
 	private String insertPointsScript;
 
 	private long lastTimeUpdated = 0;
+	private long lastTimeUpdatedWhileMoving = 0;
 	private final OsmandApplication ctx;
 
 	private LatLon lastPoint;
+	private LatLon lastPointWhileMoving;
 	private float distance = 0;
 	private SelectedGpxFile currentTrack;
 	private int points;
@@ -345,6 +347,8 @@ public class SavingTrackHelper extends SQLiteOpenHelper {
 	public void startNewSegment() {
 		lastTimeUpdated = 0;
 		lastPoint = null;
+		lastTimeUpdatedWhileMoving = 0;
+		lastPointWhileMoving = null;
 		execWithClose(updateScript, new Object[] { 0, 0, 0, 0, 0, System.currentTimeMillis()});
 		addTrackPoint(null, true, System.currentTimeMillis());
 	}
@@ -382,6 +386,8 @@ public class SavingTrackHelper extends SQLiteOpenHelper {
 		boolean newSegment = false;
 		if (lastPoint == null || (time - lastTimeUpdated) > 180 * 1000) {
 			lastPoint = new LatLon(lat, lon);
+			lastPointWhileMoving = new LatLon(lat, lon);
+			lastTimeUpdatedWhileMoving = time;
 			newSegment = true;
 		} else {
 			float[] lastInterval = new float[1];
@@ -391,6 +397,20 @@ public class SavingTrackHelper extends SQLiteOpenHelper {
 			lastPoint = new LatLon(lat, lon);
 		}
 		lastTimeUpdated = time;
+
+		if (lastPointWhileMoving == null) {
+			lastPointWhileMoving = new LatLon(lat, lon);
+			lastTimeUpdatedWhileMoving = time;
+		}
+		float[] lastIntervalWhileMoving = new float[1];
+		net.osmand.Location.distanceBetween(lat, lon, lastPointWhileMoving.getLatitude(), lastPointWhileMoving.getLongitude(), lastIntervalWhileMoving);
+		if (lastIntervalWhileMoving[0] > 20f) {
+			if ((time - lastTimeUpdatedWhileMoving) > 180 * 1000) {
+				newSegment = true;
+			}
+			lastPointWhileMoving = new LatLon(lat, lon);
+			lastTimeUpdatedWhileMoving = time;
+		}
 		WptPt pt = new GPXUtilities.WptPt(lat, lon, time, alt, speed, hdop);
 		addTrackPoint(pt, newSegment, time);
 	}
