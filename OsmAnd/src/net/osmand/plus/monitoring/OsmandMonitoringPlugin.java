@@ -264,7 +264,6 @@ public class OsmandMonitoringPlugin extends OsmandPlugin {
 		final TIntArrayList items = new TIntArrayList();
 		if(wasTrackMonitored) {
 			items.add(R.string.gpx_monitoring_stop);
-			items.add(R.string.gpx_start_new_segment);
 			if(settings.LIVE_MONITORING.get()) {
 				items.add(R.string.live_monitoring_stop);
 			} else if(!settings.LIVE_MONITORING_URL.getProfileDefaultValue(settings.APPLICATION_MODE.get()).
@@ -275,6 +274,7 @@ public class OsmandMonitoringPlugin extends OsmandPlugin {
 			items.add(R.string.gpx_monitoring_start);
 		}
 		if(app.getSavingTrackHelper().hasDataToSave()) {
+			items.add(R.string.gpx_start_new_segment);
 			items.add(R.string.save_current_track);
 		}
 		String[] strings = new String[items.size()];
