@@ -407,6 +407,8 @@ public class SavingTrackHelper extends SQLiteOpenHelper {
 		if (lastIntervalWhileMoving[0] > 20f) {
 			if ((time - lastTimeUpdatedWhileMoving) > 180 * 1000) {
 				newSegment = true;
+				// Also create new segment in gpx file when saved
+				execWithClose(updateScript, new Object[] { 0, 0, 0, 0, 0, time});
 			}
 			lastPointWhileMoving = new LatLon(lat, lon);
 			lastTimeUpdatedWhileMoving = time;
