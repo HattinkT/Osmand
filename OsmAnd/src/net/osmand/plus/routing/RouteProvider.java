@@ -515,7 +515,7 @@ public class RouteProvider {
 		newParams.ctx = rParams.ctx;
 		newParams.calculationProgress = rParams.calculationProgress;
 		newParams.mode = rParams.mode;
-		newParams.type = RouteService.OSMAND;
+		newParams.type = rParams.type;
 		newParams.leftSide = rParams.leftSide;
 		RouteCalculationResult newRes = null;
 		try {
@@ -656,6 +656,18 @@ public class RouteProvider {
 	}
 	
 	protected RouteCalculationResult findVectorMapsRoute(final RouteCalculationParams params, boolean calcGPXRoute) throws IOException {
+
+		if (params.type == RouteService.BROUTER) {
+			try {
+				return findBROUTERRoute(params);
+			} catch (Exception e) {
+			}
+		}
+
+		return findVectorMapsRouteOsmAnd(params, calcGPXRoute);
+	}
+
+	private RouteCalculationResult findVectorMapsRouteOsmAnd(final RouteCalculationParams params, boolean calcGPXRoute) throws IOException {
 		BinaryMapIndexReader[] files = params.ctx.getResourceManager().getRoutingMapFiles();
 		RoutePlannerFrontEnd router = new RoutePlannerFrontEnd(false);
 		OsmandSettings settings = params.ctx.getSettings();
