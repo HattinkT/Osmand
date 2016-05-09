@@ -26,4 +26,6 @@ public class RouteCalculationParams {
 	public boolean fast;
 	public boolean leftSide;
 	public RouteCalculationProgress calculationProgress;
+	public boolean gpxStartPassed;
+	public boolean gpxEndPassed;
 }
