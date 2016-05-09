@@ -338,7 +338,7 @@ task appStart(type: Exec) {
 clean.dependsOn 'cleanNoTranslate'
 
 task cleanNoTranslate() {
-	delete('res/values/no_translate.xml')
+	// delete('res/values/no_translate.xml')
 }
 
 repositories {
