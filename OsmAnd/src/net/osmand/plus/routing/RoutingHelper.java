@@ -55,6 +55,8 @@ public class RoutingHelper {
 	private boolean isPauseNavigation = false;
 	
 	private GPXRouteParamsBuilder currentGPXRoute = null;
+	private boolean gpxStartPassed = false;
+	private boolean gpxEndPassed = false;
 
 	private RouteCalculationResult route = new RouteCalculationResult("");
 	
@@ -156,6 +158,8 @@ public class RoutingHelper {
 	public synchronized void clearCurrentRoute(LatLon newFinalLocation, List<LatLon> newIntermediatePoints) {
 		route = new RouteCalculationResult("");
 		isDeviatedFromRoute = false;
+		gpxStartPassed = false;
+		gpxEndPassed = false;
 		evalWaitInterval = 0;
 		app.getWaypointHelper().setNewRoute(route);
 		app.runInUIThread(new Runnable() {
@@ -496,8 +500,15 @@ public class RoutingHelper {
 				break;
 			}
 		}
-		
-		// 2. check if intermediate found
+
+		// 2. check if start or end of gpx route is passed
+		if (currentRoute >= route.getNumPointsToReferenceRoute()) {
+			gpxStartPassed = true;
+		}
+		if (currentRoute > route.getNumPointsToEndReferenceRoute()) {
+			gpxEndPassed = true;
+		}
+		// 3. check if intermediate found
 		if(route.getIntermediatePointsToPass()  > 0
 				&& route.getDistanceToNextIntermediate(lastFixedLocation) < POSITION_TOLERANCE * 2
 				&& !isRoutePlanningMode) {
@@ -529,7 +540,7 @@ public class RoutingHelper {
 			}
 		}
 
-		// 3. check if destination found
+		// 4. check if destination found
 		Location lastPoint = routeNodes.get(routeNodes.size() - 1);
 		if (currentRoute > routeNodes.size() - 3
 				&& currentLocation.distanceTo(lastPoint) < (((float)settings.getApplicationMode().getArrivalDistance()) * settings.ARRIVAL_DISTANCE_FACTOR.get())
@@ -911,6 +922,8 @@ public class RoutingHelper {
 			params.intermediates = intermediates;
 			params.gpxRoute = gpxRoute == null ? null : gpxRoute.build(start, settings);
 			params.onlyStartPointChanged = onlyStartPointChanged;
+			params.gpxStartPassed = gpxStartPassed;
+			params.gpxEndPassed = gpxEndPassed;
 			if(recalculateCountInInterval < RECALCULATE_THRESHOLD_COUNT_CAUSING_FULL_RECALCULATE) {
 				params.previousToRecalculate = previousRoute;
 			} else {
