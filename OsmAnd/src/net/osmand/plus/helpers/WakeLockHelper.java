@@ -9,6 +9,9 @@ import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.PowerManager;
 
@@ -105,6 +108,16 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 						| PowerManager.ACQUIRE_CAUSES_WAKEUP,
 						"OsmAndOnVoiceWakeupTag");
 				wakeLock.acquire();
+
+				if (settings.NOTIFY_ON_WAKE.get()) {
+					try {
+						Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+						Ringtone r = RingtoneManager.getRingtone(app, notification);
+						r.play();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 			}
 
 			ScheduleReleaseWakeLocks();
