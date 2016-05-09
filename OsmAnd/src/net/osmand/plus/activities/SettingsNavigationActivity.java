@@ -154,6 +154,8 @@ public class SettingsNavigationActivity extends SettingsBaseActivity {
 					+ getString(R.string.int_seconds);
 		}
 		registerListPreference(settings.WAKE_ON_VOICE_INT, screen, screenPowerSaveNames, screenPowerSaveValues);
+
+		registerBooleanPreference(settings.NOTIFY_ON_WAKE, screen);
         
 //         registerBooleanPreference(settings.SHOW_ZOOM_BUTTONS_NAVIGATION, screen);
 

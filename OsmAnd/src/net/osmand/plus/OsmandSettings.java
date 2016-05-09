@@ -1086,6 +1086,15 @@ public class OsmandSettings {
 		WAKE_ON_VOICE_INT.setModeDefaultValue(ApplicationMode.PEDESTRIAN, 0);
 	}
 
+	// play notification when waking up
+	public final CommonPreference<Boolean> NOTIFY_ON_WAKE = new BooleanPreference("notify_on_wake", false).makeProfile();
+
+	{
+		NOTIFY_ON_WAKE.setModeDefaultValue(ApplicationMode.CAR, false);
+		NOTIFY_ON_WAKE.setModeDefaultValue(ApplicationMode.BICYCLE, false);
+		NOTIFY_ON_WAKE.setModeDefaultValue(ApplicationMode.PEDESTRIAN, false);
+	}
+
 	// this value string is synchronized with settings_pref.xml preference name
 	// try without AUTO_FOLLOW_ROUTE_NAV (see forum discussion 'Simplify our navigation preference menu')
 	//public final CommonPreference<Boolean> AUTO_FOLLOW_ROUTE_NAV = new BooleanPreference("auto_follow_route_navigation", true, false);
