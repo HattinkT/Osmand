@@ -316,23 +316,25 @@ public class RoutingHelper {
 				int currentRoute = route.currentRoute;
 
 				// 2. Check if we are ahead of the start location of the reference gpx track or online route
-				int numPointsToReferenceRoute = route.getNumPointsToReferenceRoute();
-				if ((currentRoute < numPointsToReferenceRoute) && (numPointsToReferenceRoute < routeNodes.size() - 1)) {
-					Location refStart = routeNodes.get(numPointsToReferenceRoute);
-					Location refNext = routeNodes.get(numPointsToReferenceRoute + 1);
-					float dToRefStart = refStart.distanceTo(currentLocation);
-					float dToRefNext = refNext.distanceTo(currentLocation);
-					if (dToRefNext < dToRefStart) {
-						log.info("Recalculate route, because ahead of current reference start point");
-						calculateRoute = true;
-					} else {
-						float bToRefStart = refStart.bearingTo(currentLocation);
-						float bToRefNext = refStart.bearingTo(refNext);
-						double diff = MapUtils.degreesDiff(bToRefStart, bToRefNext);
-
-						if (Math.abs(diff) < 90f) {
+				if (gpxStartPassed || ((currentGPXRoute != null) && !currentGPXRoute.isPassWholeRoute())) {
+					int numPointsToReferenceRoute = route.getNumPointsToReferenceRoute();
+					if ((currentRoute < numPointsToReferenceRoute) && (numPointsToReferenceRoute < routeNodes.size() - 1)) {
+						Location refStart = routeNodes.get(numPointsToReferenceRoute);
+						Location refNext = routeNodes.get(numPointsToReferenceRoute + 1);
+						float dToRefStart = refStart.distanceTo(currentLocation);
+						float dToRefNext = refNext.distanceTo(currentLocation);
+						if (dToRefNext < dToRefStart) {
 							log.info("Recalculate route, because ahead of current reference start point");
 							calculateRoute = true;
+						} else {
+							float bToRefStart = refStart.bearingTo(currentLocation);
+							float bToRefNext = refStart.bearingTo(refNext);
+							double diff = MapUtils.degreesDiff(bToRefStart, bToRefNext);
+
+							if (Math.abs(diff) < 90f) {
+								log.info("Recalculate route, because ahead of current reference start point");
+								calculateRoute = true;
+							}
 						}
 					}
 				}
