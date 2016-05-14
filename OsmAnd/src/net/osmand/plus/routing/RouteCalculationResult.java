@@ -29,8 +29,8 @@ public class RouteCalculationResult {
 	private final int[] listDistance;
 	private final int[] intermediatePoints;
 	private final float routingTime;
-	private final int numPointsToReferenceRoute;
-	private final int numPointsToEndReferenceRoute;
+	private int numPointsToReferenceRoute;
+	private int numPointsToEndReferenceRoute;
 
 	protected int cacheCurrentTextDirectionInfo = -1;
 	protected List<RouteDirectionInfo> cacheAgreggatedDirections;
@@ -524,6 +524,12 @@ public class RouteCalculationResult {
 		for (int i = 0; i < locations.size() - 1;) {
 			if (locations.get(i).distanceTo(locations.get(i + 1)) == 0) {
 				locations.remove(i);
+				if (i<numPointsToReferenceRoute) {
+					numPointsToReferenceRoute--;
+				}
+				if (i<numPointsToEndReferenceRoute) {
+					numPointsToEndReferenceRoute--;
+				}
 				if (directions != null) {
 					for (RouteDirectionInfo info : directions) {
 						if (info.routePointOffset > i) {
@@ -542,11 +548,17 @@ public class RouteCalculationResult {
 	 * If beginning is too far from start point, then introduce GO Ahead
 	 * @param end 
 	 */
-	private static void introduceFirstPointAndLastPoint(List<Location> locations, List<RouteDirectionInfo> directions, List<RouteSegmentResult> segs, Location start, 
+	private void introduceFirstPointAndLastPoint(List<Location> locations, List<RouteDirectionInfo> directions, List<RouteSegmentResult> segs, Location start,
 			LatLon end) {
 		if (!locations.isEmpty() && locations.get(0).distanceTo(start) > 50) {
 			// add start point
 			locations.add(0, start);
+			if (numPointsToReferenceRoute>0) {
+				numPointsToReferenceRoute++;
+			}
+			if (numPointsToEndReferenceRoute>0) {
+				numPointsToEndReferenceRoute++;
+			}
 			if(segs != null) {
 				segs.add(0, segs.get(0));
 			}
