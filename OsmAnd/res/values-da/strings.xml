@@ -1828,7 +1828,7 @@
     <string name="shared_string_currently_recording_track">Nuværende optagelsesspor</string>
     <string name="waypoint_visit_after">Besøg efter</string>
     <string name="waypoint_visit_before">Besøg før</string>
-    <string name="shared_string_collapse">Fold sammen</string>
+    <string name="shared_string_collapse">Kollapset</string>
     <string name="action_create">Handling: oprette</string>
     <string name="action_modify">Handling: rediger</string>
     <string name="action_delete">Handling: slet</string>
@@ -2368,4 +2368,6 @@
     <string name="follow_us">Følg os</string>
     <string name="move_marker_bottom_sheet_title">Flyt kortet for at ændre markørens position</string>
     <string name="lat_lon_pattern">Lat: %1$.6f Lon: %2$.6f</string>
+    <string name="map_widget_battery">Batteriniveau</string>
+    <string name="lang_hu_formal">Ungarsk (formel)</string>
     </resources>

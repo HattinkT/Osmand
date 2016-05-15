@@ -616,7 +616,7 @@
     <string name="left_side_navigation">Ruch lewostronny</string>
     <string name="left_side_navigation_descr">Wybierz dla krajów z ruchem lewostronnym</string>
 
-    <string name="unknown_from_location">Punkt początkowy nie jest jeszcze wyznaczony</string>
+    <string name="unknown_from_location">Początek trasy nie jest jeszcze wyznaczony</string>
     <string name="confirm_interrupt_download">Anulować pobieranie pliku?</string>
     <string name="basemap_was_selected_to_download">Do pobrania została wybrana mapa bazowa wymagana do prawidłowego funkcjonowania programu.</string>
 
@@ -804,16 +804,16 @@
     <string name="osmand_parking_add_event">Dodaj powiadomienie do aplikacji kalendarza</string>
     <string name="osmand_parking_time_limit">Parking ograniczony czasowo</string>
     <string name="osmand_parking_time_no_limit">Parking nielimitowany czasowo</string>
-    <string name="osmand_parking_position_description">Pozycja zaparkowanego samochodu. %1$s</string>
+    <string name="osmand_parking_position_description">Położenie zaparkowanego samochodu. %1$s</string>
     <string name="osmand_parking_position_description_add">Odebrać samochód o:</string>
     <string name="osmand_parking_pm">PM</string>
     <string name="osmand_parking_am">AM</string>
     <string name="osmand_parking_position_name">Miejsce parkowania</string>
     <string name="osmand_parking_plugin_description">Pozwala łatwo zapamiętać, gdzie został zaparkowany samochód oraz ile pozostało czasu parkowania, jeśli jest on ograniczony. Miejsce parkowania oraz czas można znaleźć na karcie w panelu oraz na widżecie mapy.\nWtyczka może dodać powiadomienie i przypomnienie do kalendarza.</string>
     <string name="osmand_parking_plugin_name">Miejsce parkowania</string>
-    <string name="context_menu_item_add_parking_point">Oznacz jako pozycja parkowania</string>
+    <string name="context_menu_item_add_parking_point">Oznacz położenie parkowania</string>
     <string name="context_menu_item_delete_parking_point">Usuń znacznik parkowania</string>
-    <string name="starting_point_too_far">Punkt początkowy jest zbyt daleko od najbliższej drogi.</string>
+    <string name="starting_point_too_far">Początek trasy znajduje się zbyt daleko od najbliższej drogi.</string>
     <string name="shared_location">Lokalizacja współdzielona</string>
 
     <string name="global_app_allocated_memory_descr">Użyta pamięć: %1$s MB (limit Androida %2$s MB, dalvika %3$s MB).</string>
@@ -891,7 +891,7 @@
     <string name="no_route">Brak trasy</string>
     <string name="delete_target_point">Usuń cel</string>
     <string name="target_point">Cel podróży %1$s</string>
-    <string name="intermediate_point">Pośrednio cel %1$s</string>
+    <string name="intermediate_point">Pośredni cel %1$s</string>
     <string name="context_menu_item_last_intermediate_point">Dodaj jako ostatni cel pośredni</string>
     <string name="context_menu_item_first_intermediate_point">Dodaj jako pierwszy cel pośredni</string>
     <string name="add_as_last_destination_point">Dodaj jako ostatni cel pośredni</string>
@@ -974,14 +974,14 @@
 
     <string name="map_widget_audionotes">Notatki głosowe</string>
 
-    <string name="av_def_action_video">Nagraj film</string>
-    <string name="av_def_action_audio">Nagraj dźwięk</string>
-    <string name="av_widget_action_descr">Wybierz domyślną akcję widgetu</string>
-    <string name="av_widget_action">Domyślna akcja widżetu</string>
+    <string name="av_def_action_video">Nagranie filmu</string>
+    <string name="av_def_action_audio">Nagranie dźwięku</string>
+    <string name="av_widget_action_descr">Wybiera domyślną funkcję widżetu</string>
+    <string name="av_widget_action">Domyślne działanie widżetu</string>
     <string name="av_video_format_descr">Wybierz format wideo</string>
     <string name="av_video_format">Format wideo</string>
-    <string name="av_use_external_recorder_descr">Użyj kamery systemowej do nagrywania filmów</string>
-    <string name="av_use_external_recorder">Użyj systemowej kamery</string>
+    <string name="av_use_external_recorder_descr">Nagrywa filmy przy użyciu aplikacji systemowej</string>
+    <string name="av_use_external_recorder">Używanie aplikacji kamery</string>
     <string name="av_settings_descr">Konfiguruj ustawienia dźwięku i obrazu</string>
     <string name="av_settings">Ustawienia obrazu/dźwięku </string>
     <string name="recording_error">Wystąpił błąd podczas nagrywania </string>
@@ -1016,7 +1016,7 @@
     <string name="osmand_srtm_long_description_1000_chars">"Dostarcza warstwy poziomic i cieniowania rzeźby terenu wyświetlanych na standardowych mapach OsmAnd. Funkcja przydatna dla sportowców, turystów i osób zainteresowanych strukturą reliefową krajobrazu.\n\nŚwiatowe dane (między 70 stopniem szerokości północnej a 70 stopniem szerokości południowej) opierają się na pomiarach SRTM (Shuttle Radar Topography Mission) i ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), przyrządu na pokładzie Terra, flagowego satelity Systemu Obserwacji Ziemi NASA. ASTER jest wspólnym przedsięwzięciem NASA, japońskiego Ministerstwa Gospodarki, Handlu i Przemysłu (METI) i Japońskich Systemów Kosmicznych (J-spacesystems). "</string>
     <string name="recording_context_menu_show">Wyświetlanie</string>
     <string name="recording_photo_description">Zdjęcie %1$s %2$s</string>
-    <string name="av_def_action_picture">Zrób zdjęcie</string>
+    <string name="av_def_action_picture">Zrobienie zdjęcia</string>
     <string name="recording_context_menu_precord">Zrób zdjęcie</string>
     <string name="stop_routing_confirm">Zatrzymać nawigację?</string>
     <string name="clear_dest_confirm">Czy na pewno chcesz wyczyścić swój punkt docelowy (i miejsca pośrednie)?</string>
@@ -1028,8 +1028,8 @@
 
     <string name="download_hillshade_maps">Cieniowanie rzeźby terenu</string>
 
-    <string name="av_use_external_camera_descr">Użyj aplikacji systemowej do robienia zdjęć</string>
-    <string name="av_use_external_camera">Użyj aplikacji aparatu</string>
+    <string name="av_use_external_camera_descr">Robi zdjęcia przy użyciu aplikacji systemowej</string>
+    <string name="av_use_external_camera">Używanie aplikacji aparatu</string>
     <string name="index_name_openmaps">OpenMaps EU</string>
 
     <string name="max_speed_none">brak</string>
@@ -1039,7 +1039,7 @@
     <string name="shared_string_map">Mapa</string>
     <string name="item_checked">zaznaczone</string>
     <string name="item_unchecked">niezaznaczone</string>
-    <string name="av_def_action_choose">Wybierz na żądanie</string>
+    <string name="av_def_action_choose">Wybranie czynności</string>
     <string name="access_arrival_time">Czas przybycia</string>
     <string name="map_widget_gps_info">Dane GPS</string>
     <string name="layer_hillshade">Cieniowanie rzeźby terenu</string>
@@ -1117,15 +1117,15 @@
     <string name="av_camera_focus_infinity">Fokus jest ustawiony na nieskończoność</string>
     <string name="av_camera_focus_macro">Makro fokus (zbliżenie)</string>
     <string name="av_camera_focus_continuous">Aparat stale stara się ustawić ostrość</string>
-    <string name="av_photo_play_sound">Odtwórz dźwięk przy robieniu zdjęć</string>
-    <string name="av_photo_play_sound_descr">Wybierz czy odtwarzać dźwięk podczas robienia zdjęć</string>
+    <string name="av_photo_play_sound">Dźwięk podczas robienia zdjęć</string>
+    <string name="av_photo_play_sound_descr">Odtwarza dźwięk podczas robienia zdjęć</string>
 
     <string name="osb_author_or_password_not_specified">Proszę wprowadzić nazwę użytkownika i hasło OSM w ustawieniach</string>
     <string name="clear_intermediate_points">Wyczyść cele pośrednie</string>
     <string name="keep_intermediate_points">Zachowaj cele pośrednie</string>
-    <string name="new_directions_point_dialog">Masz już ustawione cele pośrednie.</string>
-    <string name="context_menu_item_directions_to">Nawiguj do</string>
-    <string name="context_menu_item_directions_from">Nawiguj z</string>
+    <string name="new_directions_point_dialog">Ustalono już cele pośrednie.</string>
+    <string name="context_menu_item_directions_to">Nawiguj do położenia</string>
+    <string name="context_menu_item_directions_from">Nawiguj z położenia</string>
     <string name="route_descr_map_location">Mapa: </string>
     <string name="route_to">Do:</string>
     <string name="route_via">Przez:</string>
@@ -1313,7 +1313,8 @@
     <string name="navigation_intent_invalid">Nieprawidłowy format: %s</string>
     <string name="osmo_settings_uuid">Unikatowy identyfikator urządzenia</string>
     <string name="osmo_settings_descr">Skonfiguruj monitorowanie i ustaw osobisty kanał monitorowania</string>
-    <string name="osmo_plugin_description">"Wtyczka ta częściowo zapewnia funkcjonalność monitoringu OpenStreetMap, zobacz https://osmo.mobi\n\nMożesz śledzić wszystkie urządzenia należące do grupy w czasie rzeczywistym. Można również zobaczyć punkt i trasy przesłane do grupy, do której należą.\n\nGrupa nie została usunięta po kilku miesiącach, wprowadza ją zgodnie z regułą tworzenie grup na stronie OsMo.mobi "</string>
+    <string name="osmo_plugin_description">"Zapewnia częściową funkcjonalność monitoringu OpenStreetMap. Więcej szczegółów na http://osmo.mobi.
+\n\nZa jej pomocą można śledzić wszystkie urządzenia z danej grupy w czasie rzeczywistym, oglądać punkty i trasy przesłane przez ich uczestników.\n\nGrupa nie została usunięta po kilku miesiącach, wprowadza ją zgodnie z regułą tworzenie grup na stronie OsMo.mobi "</string>
     <string name="osmo_plugin_name">Monitoring OpenStreetMap</string>
     <string name="osmo_settings">OsMo</string>
     <string name="keep_informing_never">Tylko ręcznie (naciśnij strzałkę)</string>
@@ -1347,7 +1348,7 @@
 
     <string name="osmo_connected_devices">Podłączone urządzenia</string>
     <string name="osmo_groups">Grupy OsMo</string>
-    <string name="osmo_tracker_id_descr">Kliknij, aby zobaczyć ID trackera</string>
+    <string name="osmo_tracker_id_descr">Wyświetla identyfikator serwera śledzącego</string>
     <string name="osmo_locations_sent">Położenie wysłane %1$d (w buforze %2$d) </string>
 
     <string name="rendering_value_pink_name">różowy</string>
@@ -1767,7 +1768,7 @@
     <string name="use_fast_recalculation">Inteligentne przeliczanie trasy</string>
     <string name="use_fast_recalculation_desc">Wyznacza ponownie tylko początkową część trasy dla długich podróży</string>
     <string name="shared_string_logoff">Wyloguj się</string>
-    <string name="osmo_share_my_location">Udostępnij pozycję</string>
+    <string name="osmo_share_my_location">Udostępnianie położenia</string>
     <string name="rendering_value_walkingRoutesOSMC_name">Kolorowanie wg zasad OSMC</string>
     <string name="rendering_value_disabled_name">Wyłączony</string>
     <string name="rendering_value_walkingRoutesScopeOSMC_name">Kolorowanie wg przeznaczenia trasy</string>
@@ -1906,7 +1907,7 @@
     <string name="si_min_km">Minuty na kilometr</string>
     <string name="si_min_m">Minuty na milę</string>
     <string name="si_nm_h">Mile morskie na godzinę (węzły)</string>
-    <string name="nm_h">węzłów/godzinę</string>
+    <string name="nm_h">węzłów</string>
     <string name="min_mile">min/m</string>
     <string name="min_km">min/km</string>
     <string name="m_s">m/s</string>
@@ -2026,12 +2027,12 @@
     <string name="dashboard_or_drawer_title">Kokpit lub menu</string>
     <string name="av_video_quality_low">Najniższa jakość</string>
     <string name="av_video_quality_high">Najwyższa jakość</string>
-    <string name="av_video_quality">Jakość video</string>
-    <string name="av_video_quality_descr">Proszę wybrać jakość wyjściowego nagrania wideo</string>
+    <string name="av_video_quality">Jakość wideo</string>
+    <string name="av_video_quality_descr">Wybiera jakość wyjściowego nagrania wideo</string>
     <string name="av_audio_format">Format dźwięku</string>
-    <string name="av_audio_format_descr">Proszę wybrać format wyjściowego nagrania dźwięku</string>
+    <string name="av_audio_format_descr">Wybiera format wyjściowego nagrania dźwięku</string>
     <string name="av_audio_bitrate">Przepływność dźwięku</string>
-    <string name="av_audio_bitrate_descr">Proszę wybrać wartość przepływności dźwięku</string>
+    <string name="av_audio_bitrate_descr">Określa wartość przepływności dźwięku</string>
     <string name="shared_string_near">Obok</string>
     <string name="routing_attr_avoid_stairs_name">Omijanie schodów</string>
     <string name="routing_attr_avoid_stairs_description">Omijanie schodów</string>
@@ -2065,7 +2066,7 @@
     <string name="n_items_removed">pozycji usuniętych</string>
     <string name="shared_string_undo_all">COFNIJ WSZYSTKO</string>
     <string name="shared_string_type">Typ</string>
-    <string name="starting_point">Punkt początkowy</string>
+    <string name="starting_point">Początek trasy</string>
     <string name="rec_split_storage_size">Wielkość pamięci</string>
     <string name="live_updates">Bieżące aktualizacje</string>
     <string name="hourly">Co godzinę</string>
@@ -2189,4 +2190,5 @@
     <string name="access_disable_wrong_direction_recalc">Utrzymywanie trasy po obraniu niewłaściwego kierunku</string>
     <string name="use_osm_live_routing_description">Włącza nawigację dla bieżących aktualizacji mapy (beta)</string>
 	<string name="access_disable_wrong_direction_recalc_descr">Zapobiega zmianie wyznaczonej trasy podczas poruszania się w niewłaściwym kierunku</string>
+    <string name="map_widget_battery">Stan akumulatora</string>
     </resources>

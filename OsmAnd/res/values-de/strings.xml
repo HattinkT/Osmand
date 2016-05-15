@@ -1361,6 +1361,7 @@ Für Hilfe mit der OsmAnd-App kontaktieren Sie bitte unser Support-Team unter su
 	<string name="lang_hi">Hindi</string>
 	<string name="lang_hr">Kroatisch</string>
 	<string name="lang_hu">Ungarisch</string>
+	<string name="lang_hu_formal">Ungarisch (formell)</string>
 	<string name="lang_hy">Armenisch</string>
 	<string name="lang_id">Indonesisch</string>
 	<string name="lang_it">Italienisch</string>
@@ -1378,7 +1379,7 @@ Für Hilfe mit der OsmAnd-App kontaktieren Sie bitte unser Support-Team unter su
 	<string name="lang_pt_br">Portugiesisch (Brasilien)</string>
 	<string name="lang_ro">Rumänisch</string>
 	<string name="lang_ru">Russisch</string>
-	<string name="lang_sc">Sardinisch</string>
+	<string name="lang_sc">Sardisch</string>
 	<string name="lang_sk">Slowakisch</string>
 	<string name="lang_sl">Slowenisch</string>
 	<string name="lang_sr">Serbisch</string>
@@ -2154,4 +2155,5 @@ Für Hilfe mit der OsmAnd-App kontaktieren Sie bitte unser Support-Team unter su
     <string name="map_widget_magnetic_bearing">Magnetische Peilung</string>
     <string name="access_no_destination">Ziel ist nicht festgelegt</string>
     <string name="use_osm_live_routing">OSM Live Navigation</string>
-    </resources>
+	<string name="map_widget_battery">Akkustand</string>
+</resources>

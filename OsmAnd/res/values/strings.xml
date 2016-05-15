@@ -12,7 +12,7 @@
 
     <string name="notify_on_wake">Notify on screen on</string>
     <string name="notify_on_wake_descr">Play notification when screen is turned on (if off) when approaching a turn</string>
-    <string name="map_widget_battery">Battery state</string>
+    <string name="map_widget_battery">Battery level</string>
     <string name="move_marker_bottom_sheet_title">Move the map to change marker\'s position</string>
     <string name="lat_lon_pattern">Lat: %1$.6f Lon: %2$.6f</string>
     <string name="follow_us">Follow us</string>
@@ -897,6 +897,7 @@
     <string name="lang_iw">Hebrew</string>
     <string name="lang_hi">Hindi</string>
     <string name="lang_hu">Hungarian</string>
+    <string name="lang_hu_formal">Hungarian (formal)</string>
     <string name="lang_id">Indonesian</string>
     <string name="lang_it">Italian</string>
     <string name="lang_ja">Japanese</string>
