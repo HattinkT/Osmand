@@ -18,27 +18,23 @@ import android.os.PowerManager;
 @SuppressLint("NewApi")
 public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 	
-	private PowerManager.WakeLock wakeLock = null;
-	private ReleaseWakeLocksRunnable releaseWakeLocksRunnable = new ReleaseWakeLocksRunnable();
+	private goToSleepRunnable goToSleepRunnable = new goToSleepRunnable();
 	private DevicePolicyManager mDevicePolicyManager;
 	private ComponentName mDeviceAdmin;
 	private Handler uiHandler;
 	private OsmandApplication app;
 	private boolean active;
-	
+
 	public WakeLockHelper(OsmandApplication app){
 		uiHandler = new Handler();
 		this.app = app;
 		mDeviceAdmin = new ComponentName(app, DeviceAdminRecv.class);
 		mDevicePolicyManager = (DevicePolicyManager) app.getSystemService(Context.DEVICE_POLICY_SERVICE);
+		VoiceRouter voiceRouter = app.getRoutingHelper().getVoiceRouter();
+		voiceRouter.addVoiceMessageListener(this);
 	}
 	
-	private void releaseWakeLocks() {
-		if (wakeLock != null) {
-			wakeLock.release();
-			wakeLock = null;
-		}
-		
+	private void goToSleep() {
 		if (mDevicePolicyManager != null && mDeviceAdmin != null) {
 			OsmandSettings settings = app.getSettings();
 			final Integer screenPowerSave = settings.WAKE_ON_VOICE_INT.get();
@@ -58,43 +54,38 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 		}
 	}
 	
-	private class ReleaseWakeLocksRunnable implements Runnable {
+	private class goToSleepRunnable implements Runnable {
 		
 		@Override
 		public void run() {
-			releaseWakeLocks();
+			goToSleep();
 		}
 	}
 
-	private void ScheduleReleaseWakeLocks() {
+	private void ScheduleSleep() {
 		OsmandSettings settings = app.getSettings();
 		final Integer screenPowerSave = settings.WAKE_ON_VOICE_INT.get();
 		if (screenPowerSave > 0) {
-			uiHandler.removeCallbacks(releaseWakeLocksRunnable);
-			uiHandler.postDelayed(releaseWakeLocksRunnable, screenPowerSave * 1000L);
+			uiHandler.removeCallbacks(goToSleepRunnable);
+			uiHandler.postDelayed(goToSleepRunnable, screenPowerSave * 1000L);
 		}
 	}
 
 	public void onStart(Activity a) {
 		this.active = true;
-		if (wakeLock == null) {
-			VoiceRouter voiceRouter = app.getRoutingHelper().getVoiceRouter();
-			voiceRouter.removeVoiceMessageListener(this);
-			ScheduleReleaseWakeLocks();
-		}		
+		ScheduleSleep();
 	}
 
 	public void onStop(Activity a) {
 		this.active = false;
-		OsmandSettings settings = app.getSettings();
-		if (!a.isFinishing() && (settings.WAKE_ON_VOICE_INT.get() > 0)) {
+		if (a.isFinishing()) {
 			VoiceRouter voiceRouter = app.getRoutingHelper().getVoiceRouter();
-			voiceRouter.addVoiceMessageListener(this);
+			voiceRouter.removeVoiceMessageListener(this);
 		}
 	}
 
 	public void onUserInteraction() {
-		ScheduleReleaseWakeLocks();
+		ScheduleSleep();
 	}
 	
 	@Override
@@ -102,12 +93,13 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 		OsmandSettings settings = app.getSettings();
 		final Integer screenPowerSave = settings.WAKE_ON_VOICE_INT.get();
 		if (screenPowerSave > 0) {
-			if (!active && wakeLock == null) {
+			if (!active) {
 				PowerManager pm = (PowerManager) app.getSystemService(Context.POWER_SERVICE);
-				wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
+				PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
 						| PowerManager.ACQUIRE_CAUSES_WAKEUP,
 						"OsmAndOnVoiceWakeupTag");
 				wakeLock.acquire();
+				wakeLock.release(); // As FLAG_KEEP_SCREEN_ON is set on main activity the screen will remain lit after release
 
 				if (settings.NOTIFY_ON_WAKE.get()) {
 					try {
@@ -120,7 +112,7 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 				}
 			}
 
-			ScheduleReleaseWakeLocks();
+			ScheduleSleep();
 		}
 	}
 	
