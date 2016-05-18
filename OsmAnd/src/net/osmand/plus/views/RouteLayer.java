@@ -64,7 +64,7 @@ public class RouteLayer extends OsmandMapLayer {
 
 	private OsmandRenderer osmandRenderer;
 
-	private static int dimAlphaFactor = 2;
+	private float[] dimmedPathEffect = {28.0f, 0.0f, 4.0f, 0.0f};
 
 	public RouteLayer(RoutingHelper helper){
 		this.helper = helper;
@@ -78,7 +78,6 @@ public class RouteLayer extends OsmandMapLayer {
 		paint.setStrokeCap(Cap.ROUND);
 		paint.setStrokeJoin(Join.ROUND);
 		paint_dimmed = new Paint(paint);
-		paint_dimmed.setAlpha(paint.getAlpha() / dimAlphaFactor);
 		actionArrow = BitmapFactory.decodeResource(view.getResources(), R.drawable.map_action_arrow, null);
 		
 		actionPaint = new Paint();
@@ -133,7 +132,7 @@ public class RouteLayer extends OsmandMapLayer {
 						paint.setStrokeWidth(12 * view.getDensity());
 					}
 					paint_dimmed = new Paint(paint);
-					paint_dimmed.setAlpha(paint.getAlpha() / dimAlphaFactor);
+					paint_dimmed.setPathEffect(osmandRenderer.getDashEffect(rc, dimmedPathEffect, 0));
 
 					osmandRenderer.updatePaint(req, actionPaint, 2, false, rc);
 					paintIconAction.setColorFilter(new PorterDuffColorFilter(actionPaint.getColor(), Mode.MULTIPLY));
@@ -141,12 +140,12 @@ public class RouteLayer extends OsmandMapLayer {
 					isPaint2 = osmandRenderer.updatePaint(req, paint2, 1, false, rc);
 					if (isPaint2) {
 						paint2_dimmed = new Paint(paint2);
-						paint2_dimmed.setAlpha(paint2.getAlpha() / dimAlphaFactor);
+						paint2_dimmed.setPathEffect(osmandRenderer.getDashEffect(rc, dimmedPathEffect, 0));
 					}
 					isPaint_1 = osmandRenderer.updatePaint(req, paint_1, -1, false, rc);
 					if (isPaint_1) {
 						paint_1_dimmed = new Paint(paint_1);
-						paint_1_dimmed.setAlpha(paint_1.getAlpha() / dimAlphaFactor);
+						paint_1_dimmed.setPathEffect(osmandRenderer.getDashEffect(rc, dimmedPathEffect, 0));
 					}
 					isShadowPaint = req.isSpecified(rrs.PROPS.R_SHADOW_RADIUS);
 					if(isShadowPaint) {
@@ -154,13 +153,12 @@ public class RouteLayer extends OsmandMapLayer {
 						shadowPaint.setColorFilter(cf);
 						shadowPaint.setStrokeWidth(paint.getStrokeWidth() + 2 * rc.getComplexValue(req, rrs.PROPS.R_SHADOW_RADIUS));
 						shadowPaint_dimmed = new Paint(shadowPaint);
-						shadowPaint_dimmed.setAlpha(shadowPaint.getAlpha() / dimAlphaFactor);
+						shadowPaint_dimmed.setPathEffect(osmandRenderer.getDashEffect(rc, dimmedPathEffect, 0));
 					}
 				} else {
 					System.err.println("Rendering attribute route is not found !");
 					paint.setStrokeWidth(12 * view.getDensity());
 					paint_dimmed = new Paint(paint);
-					paint_dimmed.setAlpha(paint.getAlpha() / dimAlphaFactor);
 				}
 				actionPaint.setStrokeWidth(7 * view.getScaleCoefficient());
 			}
