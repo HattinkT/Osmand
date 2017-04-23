@@ -147,6 +147,7 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 	private List<ActivityResultListener> activityResultListeners = new ArrayList<>();
 
 	private BroadcastReceiver screenOffReceiver;
+	private BroadcastReceiver powerEventReceiver;
 
 	/**
 	 * Called when the activity is first created.
@@ -288,9 +289,15 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 		mapActions.updateDrawerMenu();
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-		IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+		IntentFilter filterScreenOff = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 		screenOffReceiver = new ScreenOffReceiver();
-		registerReceiver(screenOffReceiver, filter);
+		registerReceiver(screenOffReceiver, filterScreenOff);
+
+		IntentFilter filterPowerEvent = new IntentFilter();
+		filterPowerEvent.addAction(Intent.ACTION_POWER_CONNECTED);
+		filterPowerEvent.addAction(Intent.ACTION_POWER_DISCONNECTED);
+		powerEventReceiver = new PowerEventReceiver();
+		registerReceiver(powerEventReceiver, filterPowerEvent);
 
 		mIsDestroyed = false;
 	}
@@ -968,6 +975,7 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(screenOffReceiver);
+		unregisterReceiver(powerEventReceiver);
 		FailSafeFuntions.quitRouteRestoreDialog();
 		OsmandPlugin.onMapActivityDestroy(this);
 		getMyApplication().unsubscribeInitListener(initListener);
@@ -1443,6 +1451,15 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			OsmandPlugin.onMapActivityScreenOff(MapActivity.this);
+		}
+
+	}
+
+	private class PowerEventReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			wakeLockHelper.onPowerEvent();
 		}
 
 	}
