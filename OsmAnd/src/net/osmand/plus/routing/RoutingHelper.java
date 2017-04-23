@@ -391,7 +391,7 @@ public class RoutingHelper {
 						voiceRouter.interruptRouteCommands();
 						voiceRouterStopped = true; // Prevents excessive execution of stop() code
 					}
-					if (distOrth > 350) {
+					if (isDeviatedFromRoute) {
 						voiceRouter.announceOffRoute(distOrth);
 					}
 				}
