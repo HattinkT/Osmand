@@ -1619,6 +1619,7 @@ public class OsmandSettings {
 	public static final String MAP_LAT_TO_SHOW = "map_lat_to_show"; //$NON-NLS-1$
 	public static final String MAP_LON_TO_SHOW = "map_lon_to_show"; //$NON-NLS-1$
 	public static final String MAP_ZOOM_TO_SHOW = "map_zoom_to_show"; //$NON-NLS-1$
+	public static final String MAP_LINKED_TO_LOCATION = "map_is_linked_to_location"; //$NON-NLS-1$
 
 	public LatLon getLastKnownMapLocation() {
 		float lat = settingsAPI.getFloat(globalPreferences, LAST_KNOWN_MAP_LAT, 0);
@@ -1649,6 +1650,15 @@ public class OsmandSettings {
 		} else {
 			return null;
 		}
+	}
+
+	public boolean getAndClearMapIsLinkedToLocation() {
+		if (!settingsAPI.contains(globalPreferences, MAP_LINKED_TO_LOCATION)) {
+			return false;
+		}
+		boolean isMapLinkedToLocation = settingsAPI.getBoolean(globalPreferences, MAP_LINKED_TO_LOCATION, false);
+		settingsAPI.edit(globalPreferences).remove(MAP_LINKED_TO_LOCATION).commit();
+		return isMapLinkedToLocation;
 	}
 
 	private Object objectToShow;
@@ -1714,6 +1724,12 @@ public class OsmandSettings {
 
 	public void setLastKnownMapZoom(int zoom) {
 		settingsAPI.edit(globalPreferences).putInt(LAST_KNOWN_MAP_ZOOM, zoom).commit();
+	}
+
+	public void setMapIsLinkedToLocation(boolean isMapLinkedToLocation) {
+		SettingsEditor edit = settingsAPI.edit(globalPreferences);
+		edit.putBoolean(MAP_LINKED_TO_LOCATION, isMapLinkedToLocation);
+		edit.commit();
 	}
 
 	public final static String POINT_NAVIGATE_LAT = "point_navigate_lat"; //$NON-NLS-1$

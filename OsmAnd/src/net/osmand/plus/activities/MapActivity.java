@@ -790,6 +790,7 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 		PointDescription mapLabelToShow = settings.getAndClearMapLabelToShow(latLonToShow);
 		Object toShow = settings.getAndClearObjectToShow();
 		boolean editToShow = settings.getAndClearEditObjectToShow();
+		boolean mapIsLinkedToLocation = settings.getAndClearMapIsLinkedToLocation();
 		int status = settings.isRouteToPointNavigateAndClear();
 		if (status != 0) {
 			// always enable and follow and let calculate it (i.e.GPS is not accessible in a garage)
@@ -801,12 +802,13 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 				dashboardOnMap.hideDashboard();
 			}
 		}
+
+		mapViewTrackingUtilities.setMapLinkedToLocation(mapIsLinkedToLocation);
+
 		if (latLonToShow != null) {
 			if (dashboardOnMap.isVisible()) {
 				dashboardOnMap.hideDashboard();
 			}
-			// remember if map should come back to isMapLinkedToLocation=true
-			mapViewTrackingUtilities.setMapLinkedToLocation(false);
 			if (mapLabelToShow != null && !mapLabelToShow.contextMenuDisabled()) {
 				mapContextMenu.setMapCenter(latLonToShow);
 				mapContextMenu.setMapPosition(mapView.getMapPosition());
@@ -843,7 +845,7 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 				}
 			} else if (!latLonToShow.equals(cur)) {
 				mapView.getAnimatedDraggingThread().startMoving(latLonToShow.getLatitude(),
-						latLonToShow.getLongitude(), settings.getMapZoomToShow(), true);
+						latLonToShow.getLongitude(), settings.getMapZoomToShow(), false);
 			}
 		}
 	}
@@ -1024,6 +1026,7 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 		}
 
 		settings.setLastKnownMapZoom(mapView.getZoom());
+		settings.setMapIsLinkedToLocation(mapViewTrackingUtilities.isMapLinkedToLocation());
 		settings.MAP_ACTIVITY_ENABLED.set(false);
 		getMyApplication().getAppCustomization().pauseActivity(MapActivity.class);
 		app.getResourceManager().interruptRendering();
