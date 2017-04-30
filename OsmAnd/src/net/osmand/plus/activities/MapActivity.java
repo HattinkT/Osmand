@@ -521,6 +521,7 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 	@Override
 	protected void onResume() {
 		super.onResume();
+		wakeLockHelper.onResume(this);
 		long tm = System.currentTimeMillis();
 
 		if (app.isApplicationInitializing() || DashboardOnMap.staticVisible) {
@@ -940,7 +941,6 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 	@Override
 	protected void onStart() {
 		super.onStart();
-		wakeLockHelper.onStart(this);
 		getMyApplication().getNotificationHelper().showNotifications();
 	}
 
@@ -1015,6 +1015,8 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 
 	@Override
 	protected void onPause() {
+		wakeLockHelper.onPause(this);
+
 		app.getMapMarkersHelper().removeListener(this);
 		app.getRoutingHelper().removeListener(this);
 		app.getDownloadThread().resetUiActivity(this);
