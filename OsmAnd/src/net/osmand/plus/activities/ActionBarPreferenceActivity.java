@@ -59,6 +59,13 @@ public abstract class ActionBarPreferenceActivity extends AppCompatPreferenceAct
 		setProgressVisibility(false);
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		((OsmandApplication) getApplication()).changeKeyguardFlags(getWindow());
+	}
+
 	static int getResIdFromAttribute(final Activity activity, final int attr) {
 		if (attr == 0)
 			return 0;

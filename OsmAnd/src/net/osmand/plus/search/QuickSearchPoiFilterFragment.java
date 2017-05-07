@@ -140,6 +140,8 @@ public class QuickSearchPoiFilterFragment extends DialogFragment {
 
 		view = inflater.inflate(R.layout.search_poi_filter, container, false);
 
+		app.changeKeyguardFlags(getDialog().getWindow());
+
 		TextView description = (TextView) view.findViewById(R.id.description);
 		description.setText(filter.getName());
 

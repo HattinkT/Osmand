@@ -43,6 +43,7 @@ public abstract class BottomSheetDialogFragment extends DialogFragment {
 		super.onStart();
 
 		final Window window = getDialog().getWindow();
+		getMyApplication().changeKeyguardFlags(window);
 		WindowManager.LayoutParams params = window.getAttributes();
 		params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 		params.gravity = Gravity.BOTTOM;

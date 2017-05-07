@@ -709,6 +709,7 @@ public class OsMoGroupsActivity extends OsmandExpandableListActivity implements 
 				app.getSettings().isLightContent() ?
 						R.style.OsmandLightTheme :
 						R.style.OsmandDarkTheme);
+		getMyApplication().changeKeyguardFlags(dialog.getWindow());
 		LinearLayout ll = new LinearLayout(this);
 		ll.setOrientation(LinearLayout.VERTICAL);
 		Toolbar tb = new Toolbar(this);

@@ -78,6 +78,9 @@ public class MapMarkerSelectionFragment extends BaseOsmAndDialogFragment {
 		nightMode = !app.getSettings().isLightContent();
 
 		View view = inflater.inflate(R.layout.map_marker_selection_fragment, container, false);
+
+		app.changeKeyguardFlags(getDialog().getWindow());
+
 		ImageButton closeButton = (ImageButton) view.findViewById(R.id.closeButton);
 		closeButton.setImageDrawable(getMyApplication().getIconsCache().getIcon(R.drawable.ic_action_mode_back));
 		closeButton.setOnClickListener(new View.OnClickListener() {

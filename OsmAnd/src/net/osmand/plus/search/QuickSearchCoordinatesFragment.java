@@ -106,6 +106,8 @@ public class QuickSearchCoordinatesFragment extends DialogFragment implements Os
 		final OsmandApplication app = getMyApplication();
 		view = inflater.inflate(R.layout.search_advanced_coords, container, false);
 
+		app.changeKeyguardFlags(getDialog().getWindow());
+
 		Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
 		toolbar.setNavigationIcon(app.getIconsCache().getIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
 		toolbar.setNavigationContentDescription(R.string.access_shared_string_navigate_up);

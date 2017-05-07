@@ -28,6 +28,9 @@ public abstract class SearchSelectionFragment extends BaseOsmAndDialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_search_list, container, false);
+
+		getMyApplication().changeKeyguardFlags(getDialog().getWindow());
+
 		ListView listView = (ListView) view.findViewById(android.R.id.list);
 		final ArrayAdapter<String> adapter = new ListAdapter(getActivity(), getListItemIcon());
 		if (getArray() != null) {

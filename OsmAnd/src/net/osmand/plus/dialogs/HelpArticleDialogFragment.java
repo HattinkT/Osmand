@@ -57,6 +57,8 @@ public class HelpArticleDialogFragment extends DialogFragment {
 							 Bundle savedInstanceState) {
 		final View view = inflater.inflate(R.layout.fragment_help_article, container, false);
 
+		getOsmandApplication().changeKeyguardFlags(getDialog().getWindow());
+
 		Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
 		toolbar.setNavigationContentDescription(R.string.access_shared_string_navigate_up);
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {

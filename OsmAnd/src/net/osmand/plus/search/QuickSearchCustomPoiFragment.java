@@ -94,6 +94,8 @@ public class QuickSearchCustomPoiFragment extends DialogFragment {
 
 		view = inflater.inflate(R.layout.search_custom_poi, container, false);
 
+		app.changeKeyguardFlags(getDialog().getWindow());
+
 		Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
 		toolbar.setNavigationIcon(app.getIconsCache().getIcon(R.drawable.ic_action_remove_dark));
 		toolbar.setNavigationContentDescription(R.string.shared_string_close);

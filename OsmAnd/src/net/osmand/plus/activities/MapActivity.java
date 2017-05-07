@@ -431,15 +431,6 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 		});
 	}
 
-	private void changeKeyguardFlags() {
-		if (settings.WAKE_ON_VOICE_INT.get() > 0) {
-			getWindow().setFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED,
-							WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-		} else {
-			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-		}
-	}
-
 	public GpxImportHelper getGpxImportHelper() {
 		return gpxImportHelper;
 	}
@@ -559,8 +550,6 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 		} else {
 			setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		}
-
-		changeKeyguardFlags();
 
 		applicationModeListener = new StateChangedListener<ApplicationMode>() {
 			@Override
@@ -1050,7 +1039,7 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 	}
 
 	public void updateApplicationModeSettings() {
-		changeKeyguardFlags();
+		app.changeKeyguardFlags(getWindow());
 		updateMapSettings();
 		mapViewTrackingUtilities.updateSettings();
 		//app.getRoutingHelper().setAppMode(settings.getApplicationMode());

@@ -59,6 +59,9 @@ public class CountrySelectionFragment extends BaseOsmAndDialogFragment {
 		}
 
 		View view = inflater.inflate(R.layout.fragment_search_list, container, false);
+
+		getMyApplication().changeKeyguardFlags(getDialog().getWindow());
+
 		ListView listView = (ListView) view.findViewById(android.R.id.list);
 		final ArrayAdapter<CountryItem> adapter = new ListAdapter(getListItemIcon());
 		if (countryItems.size() > 0) {

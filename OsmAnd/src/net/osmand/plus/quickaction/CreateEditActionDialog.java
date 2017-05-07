@@ -100,7 +100,12 @@ public class CreateEditActionDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.quick_action_create_edit_dialog, parent, false);
+        OsmandApplication application = (OsmandApplication) getActivity().getApplication();
+
+        View view = inflater.inflate(R.layout.quick_action_create_edit_dialog, parent, false);
+        application.changeKeyguardFlags(getDialog().getWindow());
+
+        return view;
     }
 
     @Override

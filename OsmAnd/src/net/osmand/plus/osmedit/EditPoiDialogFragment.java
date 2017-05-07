@@ -120,6 +120,9 @@ public class EditPoiDialogFragment extends BaseOsmAndDialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_edit_poi, container, false);
+
+		getMyApplication().changeKeyguardFlags(getDialog().getWindow());
+
 		boolean isLightTheme = getSettings().OSMAND_THEME.get() == OsmandSettings.OSMAND_LIGHT_THEME;
 
 		if (savedInstanceState != null) {

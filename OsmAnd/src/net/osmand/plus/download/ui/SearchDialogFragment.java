@@ -87,6 +87,8 @@ public class SearchDialogFragment extends DialogFragment implements DownloadEven
 							 Bundle savedInstanceState) {
 		final View view = inflater.inflate(R.layout.maps_in_category_fragment, container, false);
 
+		getMyApplication().changeKeyguardFlags(getDialog().getWindow());
+
 		if (savedInstanceState != null) {
 			searchText = savedInstanceState.getString(SEARCH_TEXT_DLG_KEY);
 		}

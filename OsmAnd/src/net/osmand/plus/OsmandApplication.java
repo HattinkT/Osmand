@@ -19,6 +19,8 @@ import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AlertDialog;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -684,6 +686,15 @@ public class OsmandApplication extends MultiDexApplication {
 		}
 		setLanguage(c);
 		c.setTheme(t);
+	}
+
+	public void changeKeyguardFlags(Window window) {
+		if (osmandSettings.WAKE_ON_VOICE_INT.get() > 0) {
+			window.setFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED,
+					WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+		} else {
+			window.clearFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+		}
 	}
 	
 	public IBRouterService getBRouterService() {

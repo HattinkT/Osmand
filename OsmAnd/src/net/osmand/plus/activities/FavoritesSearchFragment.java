@@ -93,6 +93,8 @@ public class FavoritesSearchFragment extends DialogFragment {
 		final Activity activity = getActivity();
 		final View view = inflater.inflate(R.layout.search_favs_fragment, container, false);
 
+		app.changeKeyguardFlags(getDialog().getWindow());
+
 		Bundle arguments = getArguments();
 		if (savedInstanceState != null) {
 			searchQuery = savedInstanceState.getString(FAV_SEARCH_QUERY_KEY);

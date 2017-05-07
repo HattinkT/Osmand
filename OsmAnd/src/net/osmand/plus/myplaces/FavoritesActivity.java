@@ -56,6 +56,8 @@ public class FavoritesActivity extends TabActivity {
 
 		app.logEvent(this, "myplaces_open");
 
+		app.changeKeyguardFlags(getWindow());
+
 		gpxImportHelper = new GpxImportHelper(this, getMyApplication(), null);
 
 		//noinspection ConstantConditions

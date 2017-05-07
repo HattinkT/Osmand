@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -212,6 +213,8 @@ public class QuickSearchDialogFragment extends DialogFragment implements OsmAndC
 							 Bundle savedInstanceState) {
 		final MapActivity mapActivity = getMapActivity();
 		final View view = inflater.inflate(R.layout.search_dialog_fragment, container, false);
+
+		app.changeKeyguardFlags(getDialog().getWindow());
 
 		toolbarController = new QuickSearchToolbarController();
 		toolbarController.setOnBackButtonClickListener(new OnClickListener() {

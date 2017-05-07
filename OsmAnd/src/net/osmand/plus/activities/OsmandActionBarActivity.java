@@ -51,6 +51,13 @@ public class OsmandActionBarActivity extends AppCompatActivity {
 		}
     }
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		getMyApplication().changeKeyguardFlags(getWindow());
+	}
+
 	public OsmandApplication getMyApplication() {
 		return (OsmandApplication) getApplication();
 	}

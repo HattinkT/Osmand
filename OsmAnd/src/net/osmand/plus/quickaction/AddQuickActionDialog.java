@@ -29,11 +29,13 @@ public class AddQuickActionDialog extends DialogFragment {
 
     public static final String TAG = AddQuickActionDialog.class.getSimpleName();
 
+    private OsmandApplication application;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        OsmandApplication application = (OsmandApplication) getActivity().getApplication();
+        application = (OsmandApplication) getActivity().getApplication();
         boolean light = application.getSettings().isLightContent() && !application.getDaynightHelper().isNightMode();
 
         return new Dialog(new ContextThemeWrapper(getActivity(), light
@@ -53,6 +55,9 @@ public class AddQuickActionDialog extends DialogFragment {
                 .getQuickActions();
 
         View root = inflater.inflate(R.layout.quick_action_add_dialog, container, false);
+
+        application.changeKeyguardFlags(getDialog().getWindow());
+
         Adapter adapter = new Adapter(QuickActionFactory.produceTypeActionsListWithHeaders(active));
 
         RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recycler_view);

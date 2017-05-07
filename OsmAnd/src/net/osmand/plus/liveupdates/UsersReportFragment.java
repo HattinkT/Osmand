@@ -30,6 +30,9 @@ public class UsersReportFragment extends BaseOsmAndDialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = inflater.inflate(R.layout.fragment_simple_list, container, false);
+
+		getMyApplication().changeKeyguardFlags(getDialog().getWindow());
+
 		ListView listView = (ListView) view.findViewById(android.R.id.list);
 		final ArrayAdapter<UserRankingByMonth> adapter = new ListAdapter(getListItemIcon());
 		String url = getArguments().getString(URL_REQUEST);
