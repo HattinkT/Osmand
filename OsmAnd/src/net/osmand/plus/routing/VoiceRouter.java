@@ -91,6 +91,7 @@ public class VoiceRouter {
 		this.player = player;
 		if (pendingCommand != null && player != null) {
 			CommandBuilder newCommand = getNewCommandPlayerToPlay();
+			notifyOnVoiceMessage();
 			if (newCommand != null) {
 				pendingCommand.play(newCommand);
 			}
@@ -222,10 +223,10 @@ public class VoiceRouter {
 		long ms = System.currentTimeMillis();
 		if (waitAnnouncedOffRoute == 0 || ms - lastAnnouncedOffRoute > waitAnnouncedOffRoute) {
 			CommandBuilder p = getNewCommandPlayerToPlay();
+			notifyOnVoiceMessage();
+			announceBackOnRoute = true;
 			if (p != null) {
-				notifyOnVoiceMessage();
 				p.offRoute(dist).play();
-				announceBackOnRoute = true;
 			}
 			if (waitAnnouncedOffRoute == 0) {
 				waitAnnouncedOffRoute = 20000;
@@ -239,8 +240,8 @@ public class VoiceRouter {
 	public void announceBackOnRoute() {
 		CommandBuilder p = getNewCommandPlayerToPlay();
 		if (announceBackOnRoute == true) {
+			notifyOnVoiceMessage();
 			if (p != null) {
-				notifyOnVoiceMessage();
 				p.backOnRoute().play();
 			}
 			announceBackOnRoute = false;
@@ -249,10 +250,10 @@ public class VoiceRouter {
 
 	public void approachWaypoint(Location location, List<LocationPointWrapper> points) {
 		CommandBuilder p = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (p == null) {
 			return;
 		}
-		notifyOnVoiceMessage();
 		double[] dist = new double[1];
 		makeSound();
 		String text = getText(location, points, dist);
@@ -261,10 +262,10 @@ public class VoiceRouter {
 
 	public void approachFavorite(Location location, List<LocationPointWrapper> points) {
 		CommandBuilder p = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (p == null) {
 			return;
 		}
-		notifyOnVoiceMessage();
 		double[] dist = new double[1];
 		makeSound();
 		String text = getText(location, points, dist);
@@ -273,11 +274,11 @@ public class VoiceRouter {
 	
 	public void approachPoi(Location location, List<LocationPointWrapper> points) {
 		CommandBuilder p = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (p == null) {
 			return;
 		}
 
-		notifyOnVoiceMessage();
 		double[] dist = new double[1];
 		String text = getText(location, points,  dist);
 		p.goAhead(dist[0], null).andArriveAtPoi(text).play();
@@ -285,10 +286,10 @@ public class VoiceRouter {
 
 	public void announceWaypoint(List<LocationPointWrapper> points) {
 		CommandBuilder p = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (p == null) {
 			return;
 		}
-		notifyOnVoiceMessage();
 		makeSound();
 		String text = getText(null, points,null);
 		p.arrivedAtWayPoint(text).play();
@@ -296,10 +297,10 @@ public class VoiceRouter {
 	
 	public void announceFavorite(List<LocationPointWrapper> points) {
 		CommandBuilder p = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (p == null) {
 			return;
 		}
-		notifyOnVoiceMessage();
 		makeSound();
 		String text = getText(null, points,null);
 		p.arrivedAtFavorite(text).play();
@@ -307,10 +308,10 @@ public class VoiceRouter {
 	
 	public void announcePoi(List<LocationPointWrapper> points) {
 		CommandBuilder p = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (p == null) {
 			return;
 		}
-		notifyOnVoiceMessage();
 		String text = getText(null, points,null);
 		p.arrivedAtPoi(text).play();
 	}
@@ -340,24 +341,24 @@ public class VoiceRouter {
 		} else if (type == AlarmInfoType.SPEED_CAMERA) {
 			if (router.getSettings().SPEAK_SPEED_CAMERA.get()) {
 				CommandBuilder p = getNewCommandPlayerToPlay();
+				notifyOnVoiceMessage();
 				if (p != null) {
-					notifyOnVoiceMessage();
 					p.attention(type+"").play();
 				}
 			}
 		} else if (type == AlarmInfoType.PEDESTRIAN) {
 			if (router.getSettings().SPEAK_PEDESTRIAN.get()) {
 				CommandBuilder p = getNewCommandPlayerToPlay();
+				notifyOnVoiceMessage();
 				if (p != null) {
-					notifyOnVoiceMessage();
 					p.attention(type+"").play();
 				}
 			}
 		} else {
 			if (router.getSettings().SPEAK_TRAFFIC_WARNINGS.get()) {
 				CommandBuilder p = getNewCommandPlayerToPlay();
+				notifyOnVoiceMessage();
 				if (p != null) {
-					notifyOnVoiceMessage();
 					p.attention(type+"").play();
 				}
 				// See Issue 2377: Announce destination again - after some motorway tolls roads split shortly after the toll
@@ -381,10 +382,10 @@ public class VoiceRouter {
 				waitAnnouncedSpeedLimit = 0;
 			} else if (router.getSettings().SPEAK_SPEED_LIMIT.get()  && ms - waitAnnouncedSpeedLimit > 10 * 1000 ) {
 				CommandBuilder p = getNewCommandPlayerToPlay();
+				notifyOnVoiceMessage();
+				lastAnnouncedSpeedLimit = ms;
+				waitAnnouncedSpeedLimit = 0;
 				if (p != null) {
-					notifyOnVoiceMessage();
-					lastAnnouncedSpeedLimit = ms;
-					waitAnnouncedSpeedLimit = 0;
 					p.speedAlarm(maxSpeed, speed).play();
 				}
 			}
@@ -545,8 +546,8 @@ public class VoiceRouter {
 
 	private boolean playMakeUTwp() {
 		CommandBuilder play = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (play != null) {
-			notifyOnVoiceMessage();
 			play.makeUTwp().play();
 			return true;
 		}
@@ -555,16 +556,16 @@ public class VoiceRouter {
 
 	private void playThen() {
 		CommandBuilder play = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (play != null) {
-			notifyOnVoiceMessage();
 			play.then().play();
 		}
 	}
 
 	private void playGoAhead(int dist, Term streetName) {
 		CommandBuilder play = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (play != null) {
-			notifyOnVoiceMessage();
 			play.goAhead(dist, streetName).play();
 		}
 	}
@@ -641,16 +642,14 @@ public class VoiceRouter {
 
 	private void playPrepareTurn(RouteSegmentResult currentSegment, RouteDirectionInfo next, int dist) {
 		CommandBuilder play = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (play != null) {
 			String tParam = getTurnType(next.getTurnType());
 			if (tParam != null) {
-				notifyOnVoiceMessage();
 				play.prepareTurn(tParam, dist, getSpeakableStreetName(currentSegment, next, true)).play();
 			} else if (next.getTurnType().isRoundAbout()) {
-				notifyOnVoiceMessage();
 				play.prepareRoundAbout(dist, next.getTurnType().getExitOut(), getSpeakableStreetName(currentSegment, next, true)).play();
 			} else if (next.getTurnType().getValue() == TurnType.TU || next.getTurnType().getValue() == TurnType.TRU) {
-				notifyOnVoiceMessage();
 				play.prepareMakeUT(dist, getSpeakableStreetName(currentSegment, next, true)).play();
 			} 
 		}
@@ -658,6 +657,7 @@ public class VoiceRouter {
 
 	private void playMakeTurnIn(RouteSegmentResult currentSegment, RouteDirectionInfo next, int dist, RouteDirectionInfo pronounceNextNext) {
 		CommandBuilder play = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (play != null) {
 			String tParam = getTurnType(next.getTurnType());
 			boolean isPlay = true;
@@ -690,7 +690,6 @@ public class VoiceRouter {
 				}
 			}
 			if (isPlay) {
-				notifyOnVoiceMessage();
 				play.play();
 			}
 		}
@@ -714,8 +713,8 @@ public class VoiceRouter {
 		if (isTargetPoint(info)) {
 			String pointName = info == null ? "" : info.pointName;
 			CommandBuilder play = getNewCommandPlayerToPlay();
+			notifyOnVoiceMessage();
 			if (play != null) {
-				notifyOnVoiceMessage();
 				if (info != null && info.intermediatePoint) {
 					play.andArriveAtIntermediatePoint(getSpeakablePointName(pointName)).play();
 				} else {
@@ -727,6 +726,7 @@ public class VoiceRouter {
 
 	private void playMakeTurn(RouteSegmentResult currentSegment, RouteDirectionInfo next, NextDirectionInfo nextNextInfo) {
 		CommandBuilder play = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (play != null) {
 			String tParam = getTurnType(next.getTurnType());
 			boolean isplay = true;
@@ -770,7 +770,6 @@ public class VoiceRouter {
 				}
 			}
 			if (isplay) {
-				notifyOnVoiceMessage();
 				play.play();
 			}
 		}
@@ -799,24 +798,24 @@ public class VoiceRouter {
 	
 	public void gpsLocationLost() {
 		CommandBuilder play = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (play != null) {
-			notifyOnVoiceMessage();
 			play.gpsLocationLost().play();
 		}
 	}
 	
 	public void gpsLocationRecover() {
 		CommandBuilder play = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (play != null) {
-			notifyOnVoiceMessage();
 			play.gpsLocationRecover().play();
 		}
 	}
 
 	public void newRouteIsCalculated(boolean newRoute) {
 		CommandBuilder play = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (play != null) {
-			notifyOnVoiceMessage();
 			if (!newRoute) {
 				play.routeRecalculated(router.getLeftDistance(), router.getLeftTime()).play();
 			} else {
@@ -835,16 +834,16 @@ public class VoiceRouter {
 
 	public void arrivedDestinationPoint(String name) {
 		CommandBuilder play = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (play != null) {
-			notifyOnVoiceMessage();
 			play.arrivedAtDestination(getSpeakablePointName(name)).play();
 		}
 	}
 	
 	public void arrivedIntermediatePoint(String name) {
 		CommandBuilder play = getNewCommandPlayerToPlay();
+		notifyOnVoiceMessage();
 		if (play != null) {
-			notifyOnVoiceMessage();
 			play.arrivedAtIntermediatePoint(getSpeakablePointName(name)).play();
 		}
 	}
@@ -889,10 +888,8 @@ public class VoiceRouter {
 			int time = voiceRouter.router.getLeftTime();
 			if (left > 0) {
 				if (type == ROUTE_CALCULATED) {
-					notifyOnVoiceMessage();
 					newCommand.newRouteCalculated(left, time).play();
 				} else if (type == ROUTE_RECALCULATED) {
-					notifyOnVoiceMessage();
 					newCommand.routeRecalculated(left, time).play();
 				}
 			}
