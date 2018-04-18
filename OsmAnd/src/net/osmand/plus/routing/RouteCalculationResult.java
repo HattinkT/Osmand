@@ -33,7 +33,8 @@ public class RouteCalculationResult {
 	private final int[] intermediatePoints;
 	private final float routingTime;
 	private final int numPointsToReferenceRoute;
-	
+	private final int numPointsToEndReferenceRoute;
+
 	protected int cacheCurrentTextDirectionInfo = -1;
 	protected List<RouteDirectionInfo> cacheAgreggatedDirections;
 	protected List<LocationPoint> locationPoints = new ArrayList<LocationPoint>();
@@ -57,12 +58,14 @@ public class RouteCalculationResult {
 		this.directions = new ArrayList<RouteDirectionInfo>();
 		this.alarmInfo = new ArrayList<AlarmInfo>();
 		this.numPointsToReferenceRoute = 0;
+		this.numPointsToEndReferenceRoute = -1;
 	}
 	
-	public RouteCalculationResult(List<Location> list, List<RouteDirectionInfo> directions, RouteCalculationParams params, List<LocationPoint> waypoints, boolean addMissingTurns, int numPointsToReferenceRoute) {
+	public RouteCalculationResult(List<Location> list, List<RouteDirectionInfo> directions, RouteCalculationParams params, List<LocationPoint> waypoints, boolean addMissingTurns, int numPointsToReferenceRoute, int numPointsToEndReferenceRoute) {
 		this.routingTime = 0;
 		this.errorMessage = null;
 		this.numPointsToReferenceRoute = numPointsToReferenceRoute;
+		this.numPointsToEndReferenceRoute = numPointsToEndReferenceRoute;
 		this.intermediatePoints = new int[params.intermediates == null ? 0 : params.intermediates.size()];
 		List<Location> locations = list == null ? new ArrayList<Location>() : new ArrayList<Location>(list);
 		List<RouteDirectionInfo> localDirections = directions == null? new ArrayList<RouteDirectionInfo>() : new ArrayList<RouteDirectionInfo>(directions);
@@ -110,6 +113,7 @@ public class RouteCalculationResult {
 		this.listDistance = new int[locations.size()];
 		calculateIntermediateIndexes(ctx, this.locations, intermediates, computeDirections, this.intermediatePoints);
 		updateListDistanceTime(this.listDistance, this.locations);
+		this.numPointsToEndReferenceRoute = locations.size() - 1;
 		this.appMode = mode;
 		
 		this.directions = Collections.unmodifiableList(computeDirections);
@@ -995,6 +999,10 @@ public class RouteCalculationResult {
 
 	public int getNumPointsToReferenceRoute() {
 		return numPointsToReferenceRoute;
+	}
+
+	public int getNumPointsToEndReferenceRoute() {
+		return numPointsToEndReferenceRoute;
 	}
 
 	public static class NextDirectionInfo {
