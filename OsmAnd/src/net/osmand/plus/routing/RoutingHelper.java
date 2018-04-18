@@ -330,7 +330,29 @@ public class RoutingHelper {
 				List<Location> routeNodes = route.getImmutableAllLocations();
 				int currentRoute = route.currentRoute;
 
-				// 2. Analyze if we need to recalculate route
+				// 2. Check if we are ahead of the start location of the reference gpx track or online route
+				int numPointsToReferenceRoute = route.getNumPointsToReferenceRoute();
+				if ((currentRoute < numPointsToReferenceRoute) && (numPointsToReferenceRoute < routeNodes.size() - 1)) {
+					Location refStart = routeNodes.get(numPointsToReferenceRoute);
+					Location refNext = routeNodes.get(numPointsToReferenceRoute + 1);
+					float dToRefStart = refStart.distanceTo(currentLocation);
+					float dToRefNext = refNext.distanceTo(currentLocation);
+					if (dToRefNext < dToRefStart) {
+						log.info("Recalculate route, because ahead of current reference start point");
+						calculateRoute = true;
+					} else {
+						float bToRefStart = refStart.bearingTo(currentLocation);
+						float bToRefNext = refStart.bearingTo(refNext);
+						double diff = MapUtils.degreesDiff(bToRefStart, bToRefNext);
+
+						if (Math.abs(diff) < 90f) {
+							log.info("Recalculate route, because ahead of current reference start point");
+							calculateRoute = true;
+						}
+					}
+				}
+
+				// 3. Analyze if we need to recalculate route
 				// >100m off current route (sideways)
 				if (currentRoute > 0) {
 					distOrth = getOrthogonalDistance(currentLocation, routeNodes.get(currentRoute - 1), routeNodes.get(currentRoute));
@@ -340,7 +362,7 @@ public class RoutingHelper {
 						calculateRoute = true;
 					}
 				}
-				// 3. Identify wrong movement direction
+				// 4. Identify wrong movement direction
 				Location next = route.getNextRouteLocation();
 				boolean wrongMovementDirection = checkWrongMovementDirection(currentLocation, next);
 				if ((!settings.DISABLE_WRONG_DIRECTION_RECALC.get()) && wrongMovementDirection && (currentLocation.distanceTo(routeNodes.get(currentRoute)) > (2 * posTolerance))) {
@@ -348,11 +370,11 @@ public class RoutingHelper {
 					isDeviatedFromRoute = true;
 					calculateRoute = true;
 				}
-				// 4. Identify if UTurn is needed
+				// 5. Identify if UTurn is needed
 				if (identifyUTurnIsNeeded(currentLocation, posTolerance)) {
 					isDeviatedFromRoute = true;
 				}
-				// 5. Update Voice router
+				// 6. Update Voice router
 				// Do not update in route planning mode
 				if (isFollowingMode) {
 					boolean inRecalc = calculateRoute || isRouteBeingCalculated();
@@ -916,7 +938,8 @@ public class RoutingHelper {
 	}
 
 	private void recalculateRouteInBackground(final Location start, final LatLon end, final List<LatLon> intermediates,
-			final GPXRouteParamsBuilder gpxRoute, final RouteCalculationResult previousRoute, boolean paramsChanged, boolean onlyStartPointChanged){
+			final GPXRouteParamsBuilder gpxRoute, final RouteCalculationResult previousRoute, boolean paramsChanged,
+			boolean onlyStartPointChanged){
 		if (start == null || end == null) {
 			return;
 		}

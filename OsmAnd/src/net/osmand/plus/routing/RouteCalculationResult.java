@@ -32,6 +32,7 @@ public class RouteCalculationResult {
 	private final int[] listDistance;
 	private final int[] intermediatePoints;
 	private final float routingTime;
+	private final int numPointsToReferenceRoute;
 	
 	protected int cacheCurrentTextDirectionInfo = -1;
 	protected List<RouteDirectionInfo> cacheAgreggatedDirections;
@@ -55,11 +56,13 @@ public class RouteCalculationResult {
 		this.listDistance = new int[0];
 		this.directions = new ArrayList<RouteDirectionInfo>();
 		this.alarmInfo = new ArrayList<AlarmInfo>();
+		this.numPointsToReferenceRoute = 0;
 	}
 	
-	public RouteCalculationResult(List<Location> list, List<RouteDirectionInfo> directions, RouteCalculationParams params, List<LocationPoint> waypoints, boolean addMissingTurns) {
+	public RouteCalculationResult(List<Location> list, List<RouteDirectionInfo> directions, RouteCalculationParams params, List<LocationPoint> waypoints, boolean addMissingTurns, int numPointsToReferenceRoute) {
 		this.routingTime = 0;
 		this.errorMessage = null;
+		this.numPointsToReferenceRoute = numPointsToReferenceRoute;
 		this.intermediatePoints = new int[params.intermediates == null ? 0 : params.intermediates.size()];
 		List<Location> locations = list == null ? new ArrayList<Location>() : new ArrayList<Location>(list);
 		List<RouteDirectionInfo> localDirections = directions == null? new ArrayList<RouteDirectionInfo>() : new ArrayList<RouteDirectionInfo>(directions);
@@ -90,6 +93,7 @@ public class RouteCalculationResult {
 	public RouteCalculationResult(List<RouteSegmentResult> list, Location start, LatLon end, List<LatLon> intermediates,  
 			OsmandApplication ctx, boolean leftSide, float routingTime, List<LocationPoint> waypoints, ApplicationMode mode) {
 		this.routingTime = routingTime;
+		this.numPointsToReferenceRoute = 0;
 		if(waypoints != null) {
 			this.locationPoints.addAll(waypoints);
 		}
@@ -989,7 +993,10 @@ public class RouteCalculationResult {
 		return time;
 	}
 
-	
+	public int getNumPointsToReferenceRoute() {
+		return numPointsToReferenceRoute;
+	}
+
 	public static class NextDirectionInfo {
 		public RouteDirectionInfo directionInfo;
 		public int distanceTo;
