@@ -678,9 +678,9 @@ public class RoutingHelper {
 					wrongMovementDirection = checkWrongMovementDirection(start, routeNodes.get(newCurrentRoute + 1));
 					// set/reset evalWaitInterval only if new route is in forward direction
 					if (wrongMovementDirection) {
-						evalWaitInterval = 3000;
+						evalWaitInterval = 5000;
 					} else {
-						evalWaitInterval = Math.max(3000, evalWaitInterval * 3 / 2);
+						evalWaitInterval = Math.max(5000, evalWaitInterval * 3 / 2);
 						evalWaitInterval = Math.min(evalWaitInterval, 15000);
 					}
 
@@ -911,7 +911,7 @@ public class RoutingHelper {
 						params.resultListener.onRouteCalculated(res.getRouteLocations());
 					}
 				} else {
-					evalWaitInterval = Math.max(3000, evalWaitInterval * 3 / 2); // for Issue #3899
+					evalWaitInterval = Math.max(5000, evalWaitInterval * 3 / 2); // for Issue #3899
 					evalWaitInterval = Math.min(evalWaitInterval, 15000);
 				}
 				currentRunningJob = null;
