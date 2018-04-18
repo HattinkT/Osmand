@@ -27,6 +27,7 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 	private boolean voiceEvent;
 	private boolean isSleeping;
 	private boolean isFocussed;
+	private Ringtone notifySound;
 
 	public WakeLockHelper(OsmandApplication app){
 		uiHandler = new Handler();
@@ -39,6 +40,8 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 		mDevicePolicyManager = (DevicePolicyManager) app.getSystemService(Context.DEVICE_POLICY_SERVICE);
 		VoiceRouter voiceRouter = app.getRoutingHelper().getVoiceRouter();
 		voiceRouter.addVoiceMessageListener(this);
+		Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		notifySound = RingtoneManager.getRingtone(app, notification);
 	}
 
 	private void wokenUp() {
@@ -53,9 +56,7 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 				if (voiceEvent) {
 					if (settings.NOTIFY_ON_WAKE.get()) {
 						try {
-							Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-							Ringtone r = RingtoneManager.getRingtone(app, notification);
-							r.play();
+							notifySound.play();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
