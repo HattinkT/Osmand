@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    buildToolsVersion '27.0.3'
 
     dexOptions {
         jumboMode true
@@ -117,12 +117,12 @@ repositories {
 }
 
 dependencies {
-    compile project(path: ':OsmAnd-java', configuration: 'android')
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
-    compile fileTree(dir: "libs", include: ["*.jar"])
-    compile "net.osmand:OsmAndCore_android:0.1-SNAPSHOT@aar"
-    debugCompile "net.osmand:OsmAndCore_androidNativeRelease:0.1-SNAPSHOT@aar"
-    nativeDebugCompile "net.osmand:OsmAndCore_androidNativeDebug:0.1-SNAPSHOT@aar"
-    releaseCompile "net.osmand:OsmAndCore_androidNativeRelease:0.1-SNAPSHOT@aar"
+    implementation project(path: ':OsmAnd-java', configuration: 'android')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "net.osmand:OsmAndCore_android:0.1-SNAPSHOT@aar"
+    debugImplementation "net.osmand:OsmAndCore_androidNativeRelease:0.1-SNAPSHOT@aar"
+    nativeDebugImplementation "net.osmand:OsmAndCore_androidNativeDebug:0.1-SNAPSHOT@aar"
+    releaseImplementation "net.osmand:OsmAndCore_androidNativeRelease:0.1-SNAPSHOT@aar"
 }
