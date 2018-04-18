@@ -9,6 +9,7 @@ import net.osmand.Location;
 import net.osmand.binary.RouteDataObject;
 import net.osmand.data.PointDescription;
 import net.osmand.plus.ApplicationMode;
+import net.osmand.plus.OsmandApplication;
 import net.osmand.plus.OsmandSettings;
 import net.osmand.plus.helpers.WaypointHelper.LocationPointWrapper;
 import net.osmand.plus.routing.AlarmInfo.AlarmInfoType;
@@ -22,8 +23,11 @@ import net.osmand.util.Algorithms;
 import net.osmand.util.MapUtils;
 import alice.tuprolog.Struct;
 import alice.tuprolog.Term;
+
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.PowerManager;
 
 
 public class VoiceRouter {
@@ -925,7 +929,15 @@ public class VoiceRouter {
 
 	public void notifyOnVoiceMessage() {
 		if (settings.WAKE_ON_VOICE_INT.get() > 0) {
-			router.getApplication().runInUIThread(new Runnable() {
+			OsmandApplication app = router.getApplication();
+ 			PowerManager pm = (PowerManager) app.getSystemService(Context.POWER_SERVICE);
+			PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
+							| PowerManager.ACQUIRE_CAUSES_WAKEUP,
+					"OsmAndOnVoiceWakeupTag");
+			wakeLock.acquire();
+			wakeLock.release(); // As FLAG_KEEP_SCREEN_ON is set on main activity the screen will remain lit after release
+
+			app.runInUIThread(new Runnable() {
 				@Override
 				public void run() {
 					for (VoiceMessageListener lnt : voiceMessageListeners.keySet()) {
