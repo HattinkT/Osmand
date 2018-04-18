@@ -1,2 +1,2 @@
-include ':OsmAnd-java', ':OsmAndCore-sample'
+include ':OsmAnd-java'
 include ':OsmAnd'
