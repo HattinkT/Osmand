@@ -13,7 +13,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Handler;
-import android.os.PowerManager;
 
 @SuppressLint("NewApi")
 public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
@@ -23,11 +22,12 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 	private ComponentName mDeviceAdmin;
 	private Handler uiHandler;
 	private OsmandApplication app;
-	private boolean active;
+	private boolean wasSleeping;
 
 	public WakeLockHelper(OsmandApplication app){
 		uiHandler = new Handler();
 		this.app = app;
+		this.wasSleeping = false;
 		mDeviceAdmin = new ComponentName(app, DeviceAdminRecv.class);
 		mDevicePolicyManager = (DevicePolicyManager) app.getSystemService(Context.DEVICE_POLICY_SERVICE);
 		VoiceRouter voiceRouter = app.getRoutingHelper().getVoiceRouter();
@@ -72,12 +72,11 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 	}
 
 	public void onStart(Activity a) {
-		this.active = true;
 		ScheduleSleep();
 	}
 
 	public void onStop(Activity a) {
-		this.active = false;
+		this.wasSleeping = true;
 		if (a.isFinishing()) {
 			VoiceRouter voiceRouter = app.getRoutingHelper().getVoiceRouter();
 			voiceRouter.removeVoiceMessageListener(this);
@@ -93,14 +92,8 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 		OsmandSettings settings = app.getSettings();
 		final Integer screenPowerSave = settings.WAKE_ON_VOICE_INT.get();
 		if (screenPowerSave > 0) {
-			if (!active) {
-				PowerManager pm = (PowerManager) app.getSystemService(Context.POWER_SERVICE);
-				PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-						| PowerManager.ACQUIRE_CAUSES_WAKEUP,
-						"OsmAndOnVoiceWakeupTag");
-				wakeLock.acquire();
-				wakeLock.release(); // As FLAG_KEEP_SCREEN_ON is set on main activity the screen will remain lit after release
-
+			if (wasSleeping) {
+				wasSleeping = false;
 				if (settings.NOTIFY_ON_WAKE.get()) {
 					try {
 						Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
