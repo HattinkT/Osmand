@@ -26,6 +26,7 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 	private boolean powerEvent;
 	private boolean voiceEvent;
 	private boolean isSleeping;
+	private boolean isFocussed;
 
 	public WakeLockHelper(OsmandApplication app){
 		uiHandler = new Handler();
@@ -33,6 +34,7 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 		powerEvent = false;
 		voiceEvent = false;
 		isSleeping = true;
+		isFocussed = false;
 		mDeviceAdmin = new ComponentName(app, DeviceAdminRecv.class);
 		mDevicePolicyManager = (DevicePolicyManager) app.getSystemService(Context.DEVICE_POLICY_SERVICE);
 		VoiceRouter voiceRouter = app.getRoutingHelper().getVoiceRouter();
@@ -97,7 +99,9 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 		
 		@Override
 		public void run() {
-			goToSleep();
+			if (isFocussed) {
+				goToSleep();
+			}
 		}
 	}
 
@@ -137,6 +141,14 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 		isSleeping = false;
 		powerEvent = false;
 		scheduleSleep();
+	}
+
+	public void onWindowFocusChanged(boolean hasFocus) {
+		if (hasFocus)
+		{
+			scheduleSleep();
+		}
+		isFocussed = hasFocus;
 	}
 
 	public void onPowerEvent() {
