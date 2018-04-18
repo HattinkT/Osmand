@@ -29,6 +29,8 @@ public class RouteCalculationParams {
 	public boolean fast;
 	public boolean leftSide;
 	public boolean inSnapToRoadMode;
+	public boolean gpxStartPassed;
+	public boolean gpxEndPassed;
 	public RouteCalculationProgress calculationProgress;
 	public RouteCalculationProgressCallback calculationProgressCallback;
 	public RouteCalculationResultListener resultListener;
