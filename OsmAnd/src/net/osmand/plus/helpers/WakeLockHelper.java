@@ -32,7 +32,7 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 		this.app = app;
 		powerEvent = false;
 		voiceEvent = false;
-		isSleeping = false;
+		isSleeping = true;
 		mDeviceAdmin = new ComponentName(app, DeviceAdminRecv.class);
 		mDevicePolicyManager = (DevicePolicyManager) app.getSystemService(Context.DEVICE_POLICY_SERVICE);
 		VoiceRouter voiceRouter = app.getRoutingHelper().getVoiceRouter();
@@ -74,9 +74,6 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 	}
 
 	private void goToSleep() {
-		powerEvent = false;
-		voiceEvent = false;
-		isSleeping = true;
 		if (mDevicePolicyManager != null && mDeviceAdmin != null) {
 			OsmandSettings settings = app.getSettings();
 			final Integer screenPowerSave = settings.WAKE_ON_VOICE_INT.get();
@@ -115,15 +112,20 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 		}
 	}
 
-	public void onStart(Activity a) {
+	public void onResume(Activity a) {
 		uiHandler.removeCallbacks(wokenUpRunnable);
 		uiHandler.postDelayed(wokenUpRunnable, 250L);
 	}
 
-	public void onStop(Activity a) {
+	public void onPause(Activity a) {
 		powerEvent = false;
 		voiceEvent = false;
 		isSleeping = true;
+		uiHandler.removeCallbacks(wokenUpRunnable);
+		uiHandler.removeCallbacks(goToSleepRunnable);
+	}
+
+	public void onStop(Activity a) {
 		if (a.isFinishing()) {
 			VoiceRouter voiceRouter = app.getRoutingHelper().getVoiceRouter();
 			voiceRouter.removeVoiceMessageListener(this);
@@ -131,6 +133,9 @@ public class WakeLockHelper implements VoiceRouter.VoiceMessageListener {
 	}
 
 	public void onUserInteraction() {
+		uiHandler.removeCallbacks(wokenUpRunnable);
+		isSleeping = false;
+		powerEvent = false;
 		scheduleSleep();
 	}
 
