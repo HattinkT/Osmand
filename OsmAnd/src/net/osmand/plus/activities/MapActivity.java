@@ -1194,6 +1194,12 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 		wakeLockHelper.onUserInteraction();
 	}
 
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		wakeLockHelper.onWindowFocusChanged(hasFocus);
+	}
+
 	protected void setProgressDlg(Dialog progressDlg) {
 		this.progressDlg = progressDlg;
 	}
