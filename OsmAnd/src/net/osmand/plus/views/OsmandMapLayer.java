@@ -379,21 +379,28 @@ public abstract class OsmandMapLayer {
 	protected static class RenderingLineAttributes {
 		protected int cachedHash;
 		public Paint paint;
+		public Paint paint_dashed;
 		public int defaultWidth = 0;
 		public int defaultColor = 0;
 		public boolean isPaint2;
 		public Paint paint2;
+		public Paint paint2_dashed;
 		public int defaultWidth2 = 0;
 		public boolean isPaint3;
 		public Paint paint3;
+		public Paint paint3_dashed;
 		public int defaultWidth3 = 0;
 		public Paint shadowPaint;
+		public Paint shadowPaint_dashed;
 		public boolean isShadowPaint;
 		public int defaultShadowWidthExtent = 2;
 		public Paint paint_1;
+		public Paint paint_1_dashed;
 		public boolean isPaint_1;
 		public int defaultWidth_1 = 0;
 		private String renderingAttribute;
+
+		private float[] dashedPathEffect = {8.0f, 0.0f, 3.0f, 0.0f};
 
 		public RenderingLineAttributes(String renderingAttribute) {
 			this.renderingAttribute = renderingAttribute;
@@ -402,6 +409,11 @@ public abstract class OsmandMapLayer {
 			paint3 = initPaint();
 			paint_1 = initPaint();
 			shadowPaint = initPaint();
+			paint_dashed = initPaint();
+			paint2_dashed = initPaint();
+			paint3_dashed = initPaint();
+			paint_1_dashed = initPaint();
+			shadowPaint_dashed = initPaint();
 		}
 
 
@@ -431,17 +443,28 @@ public abstract class OsmandMapLayer {
 						rc.setDensityValue((float) tileBox.getDensity());
 						// cachedColor = req.getIntPropertyValue(rrs.PROPS.R_COLOR);
 						renderer.updatePaint(req, paint, 0, false, rc);
+						renderer.updatePaint(req, paint_dashed, 0, false, rc);
+						paint_dashed.setPathEffect(renderer.getDashEffect(rc, dashedPathEffect, 0));
 						isPaint2 = renderer.updatePaint(req, paint2, 1, false, rc);
 						if (paint2.getStrokeWidth() == 0 && defaultWidth2 != 0) {
 							paint2.setStrokeWidth(defaultWidth2);
+							renderer.updatePaint(req, paint2_dashed, 1, false, rc);
+							paint2_dashed.setStrokeWidth(defaultWidth2);
+							paint2_dashed.setPathEffect(renderer.getDashEffect(rc, dashedPathEffect, 0));
 						}
 						isPaint3 = renderer.updatePaint(req, paint3, 2, false, rc);
 						if (paint3.getStrokeWidth() == 0 && defaultWidth3 != 0) {
 							paint3.setStrokeWidth(defaultWidth3);
+							renderer.updatePaint(req, paint3_dashed, 2, false, rc);
+							paint3_dashed.setStrokeWidth(defaultWidth3);
+							paint3_dashed.setPathEffect(renderer.getDashEffect(rc, dashedPathEffect, 0));
 						}
 						isPaint_1 = renderer.updatePaint(req, paint_1, -1, false, rc);
 						if (paint_1.getStrokeWidth() == 0 && defaultWidth_1 != 0) {
 							paint_1.setStrokeWidth(defaultWidth_1);
+							renderer.updatePaint(req, paint_1_dashed, -1, false, rc);
+							paint_1_dashed.setStrokeWidth(defaultWidth_1);
+							paint_1_dashed.setPathEffect(renderer.getDashEffect(rc, dashedPathEffect, 0));
 						}
 						isShadowPaint = req.isSpecified(rrs.PROPS.R_SHADOW_RADIUS);
 						if (isShadowPaint) {
@@ -450,13 +473,19 @@ public abstract class OsmandMapLayer {
 							shadowPaint.setColorFilter(cf);
 							shadowPaint.setStrokeWidth(paint.getStrokeWidth() + defaultShadowWidthExtent
 									* rc.getComplexValue(req, rrs.PROPS.R_SHADOW_RADIUS));
+							shadowPaint_dashed.setColorFilter(cf);
+							shadowPaint_dashed.setStrokeWidth(paint.getStrokeWidth() + defaultShadowWidthExtent
+									* rc.getComplexValue(req, rrs.PROPS.R_SHADOW_RADIUS));
+							shadowPaint_dashed.setPathEffect(renderer.getDashEffect(rc, dashedPathEffect, 0));
 						}
 					} else {
 						System.err.println("Rendering attribute route is not found !");
 					}
 					updateDefaultColor(paint, defaultColor);
+					updateDefaultColor(paint_dashed, defaultColor);
 					if (paint.getStrokeWidth() == 0 && defaultWidth != 0) {
 						paint.setStrokeWidth(defaultWidth);
+						paint_dashed.setStrokeWidth(defaultWidth);
 					}
 				}
 				return true;
@@ -475,19 +504,19 @@ public abstract class OsmandMapLayer {
 			return Arrays.hashCode(o);
 		}
 
-		public void drawPath(Canvas canvas, Path path) {
+		public void drawPath(Canvas canvas, Path path, boolean dashed) {
 			if (isPaint_1) {
-				canvas.drawPath(path, paint_1);
+				canvas.drawPath(path, dashed ? paint_1_dashed : paint_1);
 			}
 			if (isShadowPaint) {
-				canvas.drawPath(path, shadowPaint);
+				canvas.drawPath(path, dashed ? shadowPaint_dashed : shadowPaint);
 			}
-			canvas.drawPath(path, paint);
+			canvas.drawPath(path, dashed ? paint_dashed : paint);
 			if (isPaint2) {
-				canvas.drawPath(path, paint2);
+				canvas.drawPath(path, dashed ? paint2_dashed : paint2);
 			}
 			if (isPaint3) {
-				canvas.drawPath(path, paint3);
+				canvas.drawPath(path, dashed ? paint3_dashed : paint3);
 			}
 		}
 	}
