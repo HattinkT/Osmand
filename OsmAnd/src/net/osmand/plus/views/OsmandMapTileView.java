@@ -408,6 +408,12 @@ public class OsmandMapTileView implements IMapDownloaderCallback {
 		}
 	}
 
+	public void resetRotate() {
+		if (getRotate() != 0) {
+			animatedDraggingThread.startRotate(0);
+		}
+	}
+
 	public boolean isShowMapPosition() {
 		return showMapPosition;
 	}
