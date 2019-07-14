@@ -31,6 +31,8 @@ public class RouteCalculationParams {
 	public boolean inPublicTransportMode;
 	public boolean startTransportStop;
 	public boolean targetTransportStop;
+	public boolean gpxStartPassed;
+	public boolean gpxEndPassed;
 	public RouteCalculationProgress calculationProgress;
 	public RouteCalculationProgressCallback calculationProgressCallback;
 	public RouteCalculationResultListener resultListener;
