@@ -588,6 +588,18 @@ public class RouteProvider {
 	}
 
 	protected RouteCalculationResult findVectorMapsRoute(final RouteCalculationParams params, boolean calcGPXRoute) throws IOException {
+
+		if (params.mode.getRouteService() == RouteService.BROUTER) {
+			try {
+				return findBROUTERRoute(params);
+			} catch (Exception e) {
+			}
+		}
+
+		return findVectorMapsRouteOsmAnd(params, calcGPXRoute);
+	}
+
+	private RouteCalculationResult findVectorMapsRouteOsmAnd(final RouteCalculationParams params, boolean calcGPXRoute) throws IOException {
 		BinaryMapIndexReader[] files = params.ctx.getResourceManager().getRoutingMapFiles();
 		RoutePlannerFrontEnd router = new RoutePlannerFrontEnd();
 		OsmandSettings settings = params.ctx.getSettings();
