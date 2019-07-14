@@ -233,7 +233,7 @@ public class VoiceRouter {
 			if (waitAnnouncedOffRoute == 0) {
 				waitAnnouncedOffRoute = 20000;
 			} else {
-				waitAnnouncedOffRoute *= 2.0;
+				waitAnnouncedOffRoute *= 1.5;
 			}
 			lastAnnouncedOffRoute = ms;
 		}
@@ -248,6 +248,7 @@ public class VoiceRouter {
 			play(p);
 			announceBackOnRoute = false;
 		}
+		waitAnnouncedOffRoute = 0;
 	}
 
 	public void approachWaypoint(Location location, List<LocationPointWrapper> points) {
@@ -441,6 +442,7 @@ public class VoiceRouter {
 			suppressDest = false;
 			playedAndArriveAtTarget = false;
 			announceBackOnRoute = false;
+			waitAnnouncedOffRoute = 0;
 			if (playGoAheadDist != -1) {
 				playGoAheadDist = 0;
 			}
