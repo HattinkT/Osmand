@@ -429,7 +429,6 @@ public class RoutingOptionsHelper {
 					.get()));
 			list.add(new OtherLocalRoutingParameter(R.string.fast_route_mode, app.getString(R.string.fast_route_mode),
 					settings.FAST_ROUTE_MODE.get()));
-			return list;
 		}
 		if (rparams != null) {
 			GPXUtilities.GPXFile fl = rparams.getFile();
