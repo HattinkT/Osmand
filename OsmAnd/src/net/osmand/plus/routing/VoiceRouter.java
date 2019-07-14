@@ -231,9 +231,9 @@ public class VoiceRouter {
 			}
 			play(p);
 			if (waitAnnouncedOffRoute == 0) {
-				waitAnnouncedOffRoute = 60000;	
+				waitAnnouncedOffRoute = 20000;
 			} else {
-				waitAnnouncedOffRoute *= 2.5;
+				waitAnnouncedOffRoute *= 2.0;
 			}
 			lastAnnouncedOffRoute = ms;
 		}
