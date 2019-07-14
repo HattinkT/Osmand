@@ -670,23 +670,29 @@ public class VoiceRouter {
 
 	private void playMakeTurnIn(RouteSegmentResult currentSegment, RouteDirectionInfo next, int dist, RouteDirectionInfo pronounceNextNext) {
 		CommandBuilder p = getNewCommandPlayerToPlay();
-		if (p != null) {
-			String tParam = getTurnType(next.getTurnType());
-			boolean isPlay = true;
-			if (tParam != null) {
+		String tParam = getTurnType(next.getTurnType());
+		boolean isPlay = true;
+		if (tParam != null) {
+			if (p != null) {
 				p.turn(tParam, dist, getSpeakableStreetName(currentSegment, next, true));
-				suppressDest = true;
-			} else if (next.getTurnType().isRoundAbout()) {
-				p.roundAbout(dist, next.getTurnType().getTurnAngle(), next.getTurnType().getExitOut(), getSpeakableStreetName(currentSegment, next, true));
-				// Other than in prepareTurn, in prepareRoundabout we do not announce destination, so we can repeat it one more time
-				suppressDest = false;
-			} else if (next.getTurnType().getValue() == TurnType.TU || next.getTurnType().getValue() == TurnType.TRU) {
-				p.makeUT(dist, getSpeakableStreetName(currentSegment, next, true));
-				suppressDest = true;
-			} else {
-				isPlay = false;
 			}
-			// 'then keep' preparation for next after next. (Also announces an interim straight segment, which is not pronounced above.)
+			suppressDest = true;
+		} else if (next.getTurnType().isRoundAbout()) {
+			if (p != null) {
+				p.roundAbout(dist, next.getTurnType().getTurnAngle(), next.getTurnType().getExitOut(), getSpeakableStreetName(currentSegment, next, true));
+			}
+			// Other than in prepareTurn, in prepareRoundabout we do not announce destination, so we can repeat it one more time
+			suppressDest = false;
+		} else if (next.getTurnType().getValue() == TurnType.TU || next.getTurnType().getValue() == TurnType.TRU) {
+			if (p != null) {
+				p.makeUT(dist, getSpeakableStreetName(currentSegment, next, true));
+			}
+			suppressDest = true;
+		} else {
+			isPlay = false;
+		}
+		// 'then keep' preparation for next after next. (Also announces an interim straight segment, which is not pronounced above.)
+		if (p != null) {
 			if (pronounceNextNext != null) {
 				TurnType t = pronounceNextNext.getTurnType();
 				isPlay = true;
@@ -694,16 +700,16 @@ public class VoiceRouter {
 					p.goAhead(dist, getSpeakableStreetName(currentSegment, next, true));
 				}
 				if (t.getValue() == TurnType.TL || t.getValue() == TurnType.TSHL || t.getValue() == TurnType.TSLL
-						|| t.getValue() == TurnType.TU || t.getValue() == TurnType.KL ) {
-					p.then().bearLeft( getSpeakableStreetName(currentSegment, next, false));
+						|| t.getValue() == TurnType.TU || t.getValue() == TurnType.KL) {
+					p.then().bearLeft(getSpeakableStreetName(currentSegment, next, false));
 				} else if (t.getValue() == TurnType.TR || t.getValue() == TurnType.TSHR || t.getValue() == TurnType.TSLR
 						|| t.getValue() == TurnType.TRU || t.getValue() == TurnType.KR) {
-					p.then().bearRight( getSpeakableStreetName(currentSegment, next, false));
+					p.then().bearRight(getSpeakableStreetName(currentSegment, next, false));
 				}
 			}
-			if (isPlay) {
-				play(p, true);
-			}
+		}
+		if (isPlay) {
+			play(p, true);
 		}
 	}
 
@@ -738,30 +744,38 @@ public class VoiceRouter {
 
 	private void playMakeTurn(RouteSegmentResult currentSegment, RouteDirectionInfo next, NextDirectionInfo nextNextInfo) {
 		CommandBuilder p = getNewCommandPlayerToPlay();
-		if (p != null) {
-			String tParam = getTurnType(next.getTurnType());
-			boolean isplay = true;
-			if (tParam != null) {
+		String tParam = getTurnType(next.getTurnType());
+		boolean isplay = true;
+		if (tParam != null) {
+			if (p != null) {
 				p.turn(tParam, getSpeakableStreetName(currentSegment, next, !suppressDest));
-			} else if (next.getTurnType().isRoundAbout()) {
-				p.roundAbout(next.getTurnType().getTurnAngle(), next.getTurnType().getExitOut(), getSpeakableStreetName(currentSegment, next, !suppressDest));
-			} else if (next.getTurnType().getValue() == TurnType.TU || next.getTurnType().getValue() == TurnType.TRU) {
-				p.makeUT(getSpeakableStreetName(currentSegment, next, !suppressDest));
-				// Do not announce goAheads
-				//} else if (next.getTurnType().getValue() == TurnType.C)) {
-				//	play.goAhead();
-			} else {
-				isplay = false;
 			}
-			// Add turn after next
-			if ((nextNextInfo != null) && (nextNextInfo.directionInfo != null)) {
+		} else if (next.getTurnType().isRoundAbout()) {
+			if (p != null) {
+				p.roundAbout(next.getTurnType().getTurnAngle(), next.getTurnType().getExitOut(), getSpeakableStreetName(currentSegment, next, !suppressDest));
+			}
+		} else if (next.getTurnType().getValue() == TurnType.TU || next.getTurnType().getValue() == TurnType.TRU) {
+			if (p != null) {
+				p.makeUT(getSpeakableStreetName(currentSegment, next, !suppressDest));
+			}
+			// Do not announce goAheads
+			//} else if (next.getTurnType().getValue() == TurnType.C)) {
+			//	play.goAhead();
+		} else {
+			isplay = false;
+		}
+		// Add turn after next
+		if ((nextNextInfo != null) && (nextNextInfo.directionInfo != null)) {
 
-				// This case only needed should we want a prompt at the end of straight segments (equivalent of makeTurn) when nextNextInfo should be announced again there.
-				if (nextNextInfo.directionInfo.getTurnType().getValue() != TurnType.C && next.getTurnType().getValue() == TurnType.C) {
+			// This case only needed should we want a prompt at the end of straight segments (equivalent of makeTurn) when nextNextInfo should be announced again there.
+			if (nextNextInfo.directionInfo.getTurnType().getValue() != TurnType.C && next.getTurnType().getValue() == TurnType.C) {
+				if (p != null) {
 					p.goAhead();
-					isplay = true;
 				}
+				isplay = true;
+			}
 
+			if (p != null) {
 				String t2Param = getTurnType(nextNextInfo.directionInfo.getTurnType());
 				if (t2Param != null) {
 					if (isplay) {
