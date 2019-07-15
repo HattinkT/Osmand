@@ -166,6 +166,12 @@ public class LockHelper implements SensorEventListener {
 		}
 	}
 
+	public void onUserInteraction() {
+		if (wakeLock != null) {
+			unlockEvent();
+		}
+	}
+
 	public void setLockUIAdapter(@Nullable LockUIAdapter adapter) {
 		lockUIAdapter = adapter;
 	}
