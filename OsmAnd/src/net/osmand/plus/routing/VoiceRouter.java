@@ -79,7 +79,7 @@ public class VoiceRouter {
 	private static RouteDirectionInfo nextRouteDirection;
 
 	public interface VoiceMessageListener {
-		void onVoiceMessage(List<String> listCommands, List<String> played);
+		void onVoiceMessage(List<String> listCommands, List<String> played, boolean important);
 	}
 
 	private List<WeakReference<VoiceMessageListener>> voiceMessageListeners = new ArrayList<>();
@@ -229,7 +229,7 @@ public class VoiceRouter {
 				p.offRoute(dist);
 				announceBackOnRoute = true;
 			}
-			play(p);
+			play(p, true);
 			if (waitAnnouncedOffRoute == 0) {
 				waitAnnouncedOffRoute = 20000;
 			} else {
@@ -245,7 +245,7 @@ public class VoiceRouter {
 			if (p != null) {
 				p.backOnRoute();
 			}
-			play(p);
+			play(p, false);
 			announceBackOnRoute = false;
 		}
 		waitAnnouncedOffRoute = 0;
@@ -259,7 +259,7 @@ public class VoiceRouter {
 			String text = getText(location, points, dist);
 			p.goAhead(dist[0], new StreetName()).andArriveAtWayPoint(text);
 		}
-		play(p);
+		play(p, false);
 	}
 
 	public void approachFavorite(Location location, List<LocationPointWrapper> points) {
@@ -270,7 +270,7 @@ public class VoiceRouter {
 			String text = getText(location, points, dist);
 			p.goAhead(dist[0], new StreetName()).andArriveAtFavorite(text);
 		}
-		play(p);
+		play(p, false);
 	}
 	
 	public void approachPoi(Location location, List<LocationPointWrapper> points) {
@@ -280,7 +280,7 @@ public class VoiceRouter {
 			String text = getText(location, points, dist);
 			p.goAhead(dist[0], new StreetName()).andArriveAtPoi(text);
 		}
-		play(p);
+		play(p, false);
 	}
 
 	public void announceWaypoint(List<LocationPointWrapper> points) {
@@ -290,7 +290,7 @@ public class VoiceRouter {
 			String text = getText(null, points, null);
 			p.arrivedAtWayPoint(text);
 		}
-		play(p);
+		play(p, false);
 	}
 	
 	public void announceFavorite(List<LocationPointWrapper> points) {
@@ -300,7 +300,7 @@ public class VoiceRouter {
 			String text = getText(null, points, null);
 			p.arrivedAtFavorite(text);
 		}
-		play(p);
+		play(p, false);
 	}
 	
 	public void announcePoi(List<LocationPointWrapper> points) {
@@ -309,7 +309,7 @@ public class VoiceRouter {
 			String text = getText(null, points, null);
 			p.arrivedAtPoi(text);
 		}
-		play(p);
+		play(p, false);
 	}
 
 	protected String getText(Location location, List<LocationPointWrapper> points, double[] dist) {
@@ -340,7 +340,7 @@ public class VoiceRouter {
 				if (p != null) {
 					p.attention(type+"");
 				}
-				play(p);
+				play(p, false);
 			}
 		} else if (type == AlarmInfoType.PEDESTRIAN) {
 			if (router.getSettings().SPEAK_PEDESTRIAN.get()) {
@@ -348,7 +348,7 @@ public class VoiceRouter {
 				if (p != null) {
 					p.attention(type+"");
 				}
-				play(p);
+				play(p, false);
 			}
 		} else if (type == AlarmInfoType.TUNNEL) {
 			if (router.getSettings().SPEAK_TUNNELS.get()) {
@@ -356,7 +356,7 @@ public class VoiceRouter {
 				if (p != null) {
 					p.attention(type+"");
 				}
-				play(p);
+				play(p, false);
 			}
 		} else {
 			if (router.getSettings().SPEAK_TRAFFIC_WARNINGS.get()) {
@@ -364,7 +364,7 @@ public class VoiceRouter {
 				if (p != null) {
 					p.attention(type+"");
 				}
-				play(p);
+				play(p, false);
 				// See Issue 2377: Announce destination again - after some motorway tolls roads split shortly after the toll
 				if (type == AlarmInfoType.TOLL_BOOTH) {
 					suppressDest = false;
@@ -391,7 +391,7 @@ public class VoiceRouter {
 					waitAnnouncedSpeedLimit = 0;
 					p.speedAlarm(maxSpeed, speed);
 				}
-				play(p);
+				play(p, false);
 			}
 		}
 	}
@@ -553,10 +553,10 @@ public class VoiceRouter {
 		CommandBuilder p = getNewCommandPlayerToPlay();
 		if (p != null) {
 			p.makeUTwp();
-			play(p);
+			play(p, true);
 			return true;
 		}
-		play(p);
+		play(p, true);
 		return false;
 	}
 
@@ -565,7 +565,7 @@ public class VoiceRouter {
 		if (p != null) {
 			p.then();
 		}
-		play(p);
+		play(p, false);
 	}
 
 	private void playGoAhead(int dist, StreetName streetName) {
@@ -573,7 +573,7 @@ public class VoiceRouter {
 		if (p != null) {
 			p.goAhead(dist, streetName);
 		}
-		play(p);
+		play(p, false);
 	}
 
 	private StreetName getSpeakableStreetName(RouteSegmentResult currentSegment, RouteDirectionInfo i, boolean includeDest) {
@@ -665,7 +665,7 @@ public class VoiceRouter {
 				p.prepareMakeUT(dist, getSpeakableStreetName(currentSegment, next, true));
 			}
 		}
-		play(p);
+		play(p, true);
 	}
 
 	private void playMakeTurnIn(RouteSegmentResult currentSegment, RouteDirectionInfo next, int dist, RouteDirectionInfo pronounceNextNext) {
@@ -702,7 +702,7 @@ public class VoiceRouter {
 				}
 			}
 			if (isPlay) {
-				play(p);
+				play(p, true);
 			}
 		}
 	}
@@ -732,7 +732,7 @@ public class VoiceRouter {
 					p.andArriveAtDestination(getSpeakablePointName(pointName));
 				}
 			}
-			play(p);
+			play(p, true);
 		}
 	}
 
@@ -781,7 +781,7 @@ public class VoiceRouter {
 				}
 			}
 			if (isplay) {
-				play(p);
+				play(p, true);
 			}
 		}
 	}
@@ -812,7 +812,7 @@ public class VoiceRouter {
 		if (p != null) {
 			p.gpsLocationLost();
 		}
-		play(p);
+		play(p, false);
 	}
 	
 	public void gpsLocationRecover() {
@@ -820,7 +820,7 @@ public class VoiceRouter {
 		if (p != null) {
 			p.gpsLocationRecover();
 		}
-		play(p);
+		play(p, false);
 	}
 
 	public void newRouteIsCalculated(boolean newRoute) {
@@ -832,9 +832,9 @@ public class VoiceRouter {
 				p.newRouteCalculated(router.getLeftDistance(), router.getLeftTime());
 			}
 		} else if (player == null) {
-			pendingCommand = new VoiceCommandPending(!newRoute ? VoiceCommandPending.ROUTE_RECALCULATED : VoiceCommandPending.ROUTE_CALCULATED, this);
+			pendingCommand = new VoiceCommandPending(!newRoute ? VoiceCommandPending.ROUTE_RECALCULATED : VoiceCommandPending.ROUTE_CALCULATED, newRoute, this);
 		}
-		play(p);
+		play(p, newRoute);
 		if (newRoute) {
 			playGoAheadDist = -1;
 		}
@@ -848,7 +848,7 @@ public class VoiceRouter {
 		if (p != null) {
 			p.arrivedAtDestination(getSpeakablePointName(name));
 		}
-		play(p);
+		play(p, true);
 	}
 	
 	public void arrivedIntermediatePoint(String name) {
@@ -856,7 +856,7 @@ public class VoiceRouter {
 		if (p != null) {
 			p.arrivedAtIntermediatePoint(getSpeakablePointName(name));
 		}
-		play(p);
+		play(p, true);
 	}
 
 	// This is not needed, used are only arrivedIntermediatePoint (for points on the route) or announceWaypoint (for points near the route=)
@@ -887,10 +887,12 @@ public class VoiceRouter {
 		public static final int ROUTE_CALCULATED = 1;
 		public static final int ROUTE_RECALCULATED = 2;
 		protected final int type;
+		protected final boolean important;
 		private final VoiceRouter voiceRouter;
 		
-		public VoiceCommandPending(int type, VoiceRouter voiceRouter) {
+		public VoiceCommandPending(int type, boolean important, VoiceRouter voiceRouter) {
 			this.type = type;
+			this.important = important;
 			this.voiceRouter = voiceRouter;
 		}
 
@@ -903,17 +905,17 @@ public class VoiceRouter {
 				} else if (type == ROUTE_RECALCULATED) {
 					newCommand.routeRecalculated(left, time);
 				}
-				VoiceRouter.this.play(newCommand);
+				VoiceRouter.this.play(newCommand, important);
 			}
 		}
 	}
 
-	private void play(CommandBuilder p) {
+	private void play(CommandBuilder p, boolean important) {
 		if (p != null) {
 			List<String> played = p.play();
-			notifyOnVoiceMessage(p.getListCommands(), played);
+			notifyOnVoiceMessage(p.getListCommands(), played, important);
 		} else {
-			notifyOnVoiceMessage(Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+			notifyOnVoiceMessage(Collections.EMPTY_LIST, Collections.EMPTY_LIST, important);
 		}
 
 	}
@@ -945,12 +947,12 @@ public class VoiceRouter {
 		voiceMessageListeners = updateVoiceMessageListeners(new ArrayList<>(voiceMessageListeners), voiceMessageListener, false);
 	}
 
-	private void notifyOnVoiceMessage(List<String> listCommands, List<String> played) {
+	private void notifyOnVoiceMessage(List<String> listCommands, List<String> played, boolean important) {
 		List<WeakReference<VoiceMessageListener>> voiceMessageListeners = this.voiceMessageListeners;
 		for (WeakReference<VoiceMessageListener> weakReference : voiceMessageListeners) {
 			VoiceMessageListener lnt = weakReference.get();
 			if (lnt != null) {
-				lnt.onVoiceMessage(listCommands, played);
+				lnt.onVoiceMessage(listCommands, played, important);
 			}
 		}
 	}

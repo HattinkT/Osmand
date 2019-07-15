@@ -59,8 +59,10 @@ public class LockHelper implements SensorEventListener {
 		};
 		voiceMessageListener = new VoiceMessageListener() {
 			@Override
-			public void onVoiceMessage(List<String> listCommands, List<String> played) {
-				unlockEvent();
+			public void onVoiceMessage(List<String> listCommands, List<String> played, boolean important) {
+				if (important) {
+					unlockEvent();
+				}
 			}
 		};
 		app.getRoutingHelper().getVoiceRouter().addVoiceMessageListener(voiceMessageListener);

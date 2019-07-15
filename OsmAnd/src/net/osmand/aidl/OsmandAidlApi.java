@@ -1924,7 +1924,7 @@ public class OsmandAidlApi {
 	public void registerForVoiceRouterMessages(long id) {
 		VoiceRouter.VoiceMessageListener listener = new VoiceRouter.VoiceMessageListener() {
 			@Override
-			public void onVoiceMessage(List<String> cmds, List<String> played) {
+			public void onVoiceMessage(List<String> cmds, List<String> played, boolean important) {
 				if (aidlCallbackListener != null) {
 					for (OsmandAidlService.AidlCallbackParams cb : aidlCallbackListener.getAidlCallbacks().values()) {
 						if (!aidlCallbackListener.getAidlCallbacks().isEmpty() && (cb.getKey() & KEY_ON_VOICE_MESSAGE) > 0) {
