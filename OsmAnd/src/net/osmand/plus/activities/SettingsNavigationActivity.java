@@ -225,6 +225,7 @@ public class SettingsNavigationActivity extends SettingsBaseActivity {
 		}
 		registerListPreference(settings.TURN_SCREEN_ON_TIME_INT, screen, screenPowerSaveNames, screenPowerSaveValues);
 		registerBooleanPreference(settings.TURN_SCREEN_ON_SENSOR, screen);
+		registerBooleanPreference(settings.NOTIFY_ON_WAKE, screen);
 	}
 
 	private void reloadVoiceListPreference(PreferenceScreen screen) {

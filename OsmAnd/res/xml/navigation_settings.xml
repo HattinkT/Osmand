@@ -89,6 +89,11 @@
             android:key="turn_screen_on_sensor"
             android:summary="@string/turn_screen_on_sensor_descr"
             android:title="@string/turn_screen_on_sensor"/>
+
+        <CheckBoxPreference
+            android:key="notify_on_wake"
+            android:title="@string/notify_on_wake"
+            android:summary="@string/notify_on_wake_descr"/>
     </PreferenceCategory>
 
     <PreferenceCategory

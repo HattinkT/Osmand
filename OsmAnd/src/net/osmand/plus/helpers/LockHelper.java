@@ -6,11 +6,14 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 
 import net.osmand.plus.OsmandApplication;
 import net.osmand.plus.OsmandSettings;
@@ -30,6 +33,9 @@ public class LockHelper implements SensorEventListener {
 	private OsmandApplication app;
 	private CommonPreference<Integer> turnScreenOnTime;
 	private CommonPreference<Boolean> turnScreenOnSensor;
+	private CommonPreference<Boolean> notifyOnWake;
+	private Ringtone notifySound;
+	private boolean playWakeupSound;
 
 
 	@Nullable
@@ -50,6 +56,11 @@ public class LockHelper implements SensorEventListener {
 		OsmandSettings settings = app.getSettings();
 		turnScreenOnTime = settings.TURN_SCREEN_ON_TIME_INT;
 		turnScreenOnSensor = settings.TURN_SCREEN_ON_SENSOR;
+		notifyOnWake = settings.NOTIFY_ON_WAKE;
+
+		Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		notifySound = RingtoneManager.getRingtone(app, notification);
+		playWakeupSound = false;
 
 		lockRunnable = new Runnable() {
 			@Override
@@ -61,6 +72,13 @@ public class LockHelper implements SensorEventListener {
 			@Override
 			public void onVoiceMessage(List<String> listCommands, List<String> played, boolean important) {
 				if (important) {
+					if (playWakeupSound && notifyOnWake.get()) {
+						try {
+							notifySound.play();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 					unlockEvent();
 				}
 			}
@@ -112,6 +130,7 @@ public class LockHelper implements SensorEventListener {
 	private void unlockEvent() {
 		int unlockTime = turnScreenOnTime.get();
 		if (unlockTime > 0) {
+			playWakeupSound = false;
 			timedUnlock(unlockTime * 1000L);
 		}
 	}
@@ -155,18 +174,21 @@ public class LockHelper implements SensorEventListener {
 	}
 
 	public void onStart(@NonNull Activity activity) {
+		playWakeupSound = false;
 		if (wakeLock == null) {
 			switchSensorOff();
 		}
 	}
 
 	public void onStop(@NonNull Activity activity) {
+		playWakeupSound = true;
 		if (!activity.isFinishing() && isSensorEnabled()) {
 			switchSensorOn();
 		}
 	}
 
 	public void onUserInteraction() {
+		playWakeupSound = false;
 		if (wakeLock != null) {
 			unlockEvent();
 		}

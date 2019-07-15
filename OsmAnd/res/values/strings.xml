@@ -11,6 +11,8 @@
 	Thx - Hardy
 
 -->
+    <string name="notify_on_wake">Notify on screen on</string>
+    <string name="notify_on_wake_descr">Play notification when screen is turned on (if off) when approaching a turn</string>
     <string name="turn_on_profile_desc">Please turn on at least one application profile, to use this setting.</string>
     <string name="rendering_attr_winter_road_name">Winter road</string>
     <string name="rendering_attr_ice_road_name">Ice road</string>
