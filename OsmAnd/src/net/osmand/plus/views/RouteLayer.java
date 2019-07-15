@@ -920,7 +920,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 		}
 		
 		private void drawSegments(RotatedTileBox tb, Canvas canvas, double topLatitude, double leftLongitude,
-				double bottomLatitude, double rightLongitude, Location lastProjection, int currentRoute) {
+				double bottomLatitude, double rightLongitude, Location lastProjection, int start, int end, boolean dashed) {
 			if (locations.size() == 0) {
 				return;
 			}
@@ -943,10 +943,13 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			}
 			List<Location> routeNodes = locations;
 			int previous = -1;
-			for (int i = currentRoute; i < routeNodes.size(); i++) {
+			if (end < 0) {
+				end = routeNodes.size();
+			}
+			for (int i = start; i <= end; i++) {
 				Location ls = routeNodes.get(i);
 				style = getStyle(i, defaultWayStyle);
-				if (simplification.getQuick(i) == 0 && !styleMap.containsKey(i)) {
+				if ((i < end) && (i > start) && (simplification.getQuick(i) == 0 && !styleMap.containsKey(i))) {
 					continue;
 				}
 				if (leftLongitude <= ls.getLongitude() && ls.getLongitude() <= rightLongitude && bottomLatitude <= ls.getLatitude()
@@ -960,7 +963,9 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 						} else if (lastProjection != null) {
 							lt = lastProjection;
 						}
-						addLocation(tb, lt, style, tx, ty, angles, distances, 0, styles); // first point
+						if (lt != null) {
+							addLocation(tb, lt, style, tx, ty, angles, distances, 0, styles); // first point
+						}
 					}
 					addLocation(tb, ls, style, tx, ty, angles, distances, dist, styles);
 					previousVisible = true;
@@ -970,13 +975,13 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 					for(int ki = i + 1; ki < odistances.size(); ki++) {
 						distToFinish += odistances.get(ki);
 					}
-					drawRouteSegment(tb, canvas, tx, ty, angles, distances, distToFinish, styles);
+					drawRouteSegment(tb, canvas, tx, ty, angles, distances, distToFinish, styles, dashed);
 					previousVisible = false;
 					clearArrays();
 				}
 				previous = i;
 			}
-			drawRouteSegment(tb, canvas, tx, ty, angles, distances, 0, styles);
+			drawRouteSegment(tb, canvas, tx, ty, angles, distances, 0, styles, dashed);
 		}
 
 		private void clearArrays() {
@@ -1018,7 +1023,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 	private RouteSimplificationGeometry routeGeometry  = new RouteSimplificationGeometry();
 	
 	private void drawRouteSegment(RotatedTileBox tb, Canvas canvas, List<Float> tx, List<Float> ty,
-			List<Double> angles, List<Double> distances, double distToFinish, List<GeometryWayStyle> styles) {
+			List<Double> angles, List<Double> distances, double distToFinish, List<GeometryWayStyle> styles, boolean dashed) {
 		if (tx.size() < 2) {
 			return;
 		}
@@ -1032,13 +1037,13 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 					if (style.isTransportLine()) {
 						attrsPT.customColor = style.getStrokeColor();
 						attrsPT.customColorPaint.setStrokeWidth(attrsPT.paint2.getStrokeWidth());
-						attrsPT.drawPath(canvas, pc.first);
+						attrsPT.drawPath(canvas, pc.first, dashed);
 						attrsPT.customColorPaint.setStrokeWidth(attrsPT.paint.getStrokeWidth());
 						attrsPT.customColor = style.getColor();
-						attrsPT.drawPath(canvas, pc.first);
+						attrsPT.drawPath(canvas, pc.first, dashed);
 					} else {
 						attrs.customColor = style.getColor();
-						attrs.drawPath(canvas, pc.first);
+						attrs.drawPath(canvas, pc.first, dashed);
 					}
 				}
 			}
@@ -1062,20 +1067,42 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 				Location startLocation = new Location("transport");
 				startLocation.setLatitude(start.getLatitude());
 				startLocation.setLongitude(start.getLongitude());
-				routeGeometry.drawSegments(tb, canvas, topLatitude, leftLongitude, bottomLatitude, rightLongitude, startLocation, 0);
+				routeGeometry.drawSegments(tb, canvas, topLatitude, leftLongitude, bottomLatitude, rightLongitude, startLocation,
+						0, -1, false);
 			}
 		} else {
 			RouteCalculationResult route = helper.getRoute();
 			routeGeometry.clearTransportRoute();
 			routeGeometry.updateRoute(tb, route);
-			routeGeometry.drawSegments(tb, canvas, topLatitude, leftLongitude, bottomLatitude, rightLongitude,
-					helper.getLastProjection(), route == null ? 0 : route.getCurrentRoute());
-			List<RouteDirectionInfo> rd = helper.getRouteDirections();
-			Iterator<RouteDirectionInfo> it = rd.iterator();
-			if (tb.getZoom() >= 14) {
-				List<Location> actionPoints = calculateActionPoints(topLatitude, leftLongitude, bottomLatitude, rightLongitude, helper.getLastProjection(),
-						helper.getRoute().getRouteLocations(), helper.getRoute().getCurrentRoute(), it, tb.getZoom());
-				drawAction(tb, canvas, actionPoints);
+			if (route != null) {
+				List<Location> routeNodes = route.getImmutableAllLocations();
+				int cd = route.getCurrentRoute();
+				Location lastProjection = helper.getLastProjection();
+				int numPointsToReferenceRoute = route.getNumPointsToReferenceRoute();
+				numPointsToReferenceRoute = Math.min(numPointsToReferenceRoute, routeNodes.size() - 1);
+				int numPointsToEndReferenceRoute = route.getNumPointsToEndReferenceRoute();
+				numPointsToEndReferenceRoute = Math.min(numPointsToEndReferenceRoute, routeNodes.size() - 1);
+				if (cd <= numPointsToReferenceRoute) {
+					routeGeometry.drawSegments(tb, canvas, topLatitude, leftLongitude, bottomLatitude, rightLongitude,
+							lastProjection, cd, numPointsToReferenceRoute, true);
+					lastProjection = null;
+				}
+				if (cd <= numPointsToEndReferenceRoute) {
+					routeGeometry.drawSegments(tb, canvas, topLatitude, leftLongitude, bottomLatitude, rightLongitude,
+							lastProjection, Math.max(numPointsToReferenceRoute, cd), numPointsToEndReferenceRoute, false);
+					lastProjection = null;
+				}
+				if (cd <= (routeNodes.size() - 1)) {
+					routeGeometry.drawSegments(tb, canvas, topLatitude, leftLongitude, bottomLatitude, rightLongitude,
+							lastProjection, Math.max(numPointsToEndReferenceRoute, cd), (routeNodes.size() - 1), true);
+				}
+				List<RouteDirectionInfo> rd = helper.getRouteDirections();
+				Iterator<RouteDirectionInfo> it = rd.iterator();
+				if (tb.getZoom() >= 14) {
+					List<Location> actionPoints = calculateActionPoints(topLatitude, leftLongitude, bottomLatitude, rightLongitude, helper.getLastProjection(),
+							route.getRouteLocations(), route.getCurrentRoute(), it, tb.getZoom());
+					drawAction(tb, canvas, actionPoints);
+				}
 			}
 		}
 	}

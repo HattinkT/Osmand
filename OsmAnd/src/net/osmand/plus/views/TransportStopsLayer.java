@@ -216,7 +216,7 @@ public class TransportStopsLayer extends OsmandMapLayer implements ContextMenuLa
 							calculatePath(tb, tx, ty, path);
 						}
 					}
-					attrs.drawPath(canvas, path);
+					attrs.drawPath(canvas, path, false);
 				} catch (Exception e) {
 					// ignore
 				}
