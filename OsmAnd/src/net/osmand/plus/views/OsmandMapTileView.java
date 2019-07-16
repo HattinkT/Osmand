@@ -516,6 +516,9 @@ public class OsmandMapTileView implements IMapDownloaderCallback {
 		if (mapPosition == OsmandSettings.BOTTOM_CONSTANT) {
 			ry -= 0.35;
 		}
+		if (mapPosition == OsmandSettings.MIDDLE_BOTTOM_CONSTANT) {
+			ry -= 0.2;
+		}
 		box.setCenterLocation(rx, ry);
 		LatLon screenCenter = box.getLatLonFromPixel(box.getPixWidth() / 2f, box.getPixHeight() / 2f);
 		mapRatioX = 0;

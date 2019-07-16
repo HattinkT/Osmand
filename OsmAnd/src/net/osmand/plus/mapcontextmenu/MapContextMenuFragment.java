@@ -1716,7 +1716,8 @@ public class MapContextMenuFragment extends BaseOsmAndFragment implements Downlo
 		double flon = latLon.getLongitude();
 
 		RotatedTileBox cp = map.getCurrentRotatedTileBox().copy();
-		cp.setCenterLocation(0.5f, map.getMapPosition() == OsmandSettings.BOTTOM_CONSTANT ? 0.15f : 0.5f);
+		cp.setCenterLocation(0.5f, map.getMapPosition() == OsmandSettings.BOTTOM_CONSTANT ? 0.15f :
+				map.getMapPosition() == OsmandSettings.MIDDLE_BOTTOM_CONSTANT ? 0.3f : 0.5f);
 		cp.setLatLonCenter(flat, flon);
 		cp.setZoom(zoom);
 		flat = cp.getLatFromPixel(cp.getPixWidth() / 2, cp.getPixHeight() / 2);
@@ -2031,7 +2032,8 @@ public class MapContextMenuFragment extends BaseOsmAndFragment implements Downlo
 		double markerLat = reqMarkerLocation.getLatitude();
 		double markerLon = reqMarkerLocation.getLongitude();
 		RotatedTileBox box = map.getCurrentRotatedTileBox().copy();
-		box.setCenterLocation(0.5f, map.getMapPosition() == OsmandSettings.BOTTOM_CONSTANT ? 0.15f : 0.5f);
+		box.setCenterLocation(0.5f, map.getMapPosition() == OsmandSettings.BOTTOM_CONSTANT ? 0.15f :
+				map.getMapPosition() == OsmandSettings.MIDDLE_BOTTOM_CONSTANT ? 0.3f : 0.5f);
 		box.setZoom(zoom);
 		boolean hasMapCenter = mapCenter != null;
 		int markerMapCenterX = 0;
