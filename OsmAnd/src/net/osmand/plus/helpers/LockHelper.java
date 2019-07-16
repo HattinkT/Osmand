@@ -177,6 +177,9 @@ public class LockHelper implements SensorEventListener {
 		playWakeupSound = false;
 		if (wakeLock == null) {
 			switchSensorOff();
+			if (lockUIAdapter != null) {
+				lockUIAdapter.unlock();
+			}
 		}
 	}
 
