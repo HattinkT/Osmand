@@ -19,6 +19,7 @@ import net.osmand.data.LatLon;
 import net.osmand.data.QuadPoint;
 import net.osmand.plus.OsmandSettings.OsmandPreference;
 import net.osmand.plus.TargetPointsHelper.TargetPoint;
+import net.osmand.plus.base.MapViewTrackingUtilities;
 import net.osmand.plus.routing.RoutingHelper;
 import net.osmand.router.RouteSegmentResult;
 import net.osmand.util.MapUtils;
@@ -69,6 +70,9 @@ public class OsmAndLocationProvider implements SensorEventListener {
 
 	private static final float ACCURACY_FOR_GPX_AND_ROUTING = 50;
 
+	private static final float MAX_HEADING_CORRECTION = 25;
+	private static final float HEADING_CORRECTION_FILTER = 50;
+
 	private static final int GPS_TIMEOUT_REQUEST = 0;
 	private static final int GPS_DIST_REQUEST = 0;
 	private static final int NOT_SWITCH_TO_NETWORK_WHEN_GPS_LOST_MS = 12000;
@@ -102,6 +106,7 @@ public class OsmAndLocationProvider implements SensorEventListener {
 	float avgValCos = 0;
 	float lastValSin = 0;
 	float lastValCos = 0;
+	float headingCorrection = 0;
 	private float[] previousCompassValuesA = new float[50];
 	private float[] previousCompassValuesB = new float[50];
 	private int previousCompassIndA = 0;
@@ -490,6 +495,20 @@ public class OsmAndLocationProvider implements SensorEventListener {
 				}
 				val = calcScreenOrientationCorrection(val);
 				val = calcGeoMagneticCorrection(val);
+
+				float delta = 0f;
+				if (location != null) {
+					boolean smallSpeedForCompass = MapViewTrackingUtilities.isSmallSpeedForCompass(location);
+					if (location.hasBearing() && !smallSpeedForCompass && location.getBearing() != 0f) {
+						delta = (float) MapUtils.degreesDiff(location.getBearing(), val);
+
+						if (Math.abs(delta) > MAX_HEADING_CORRECTION) {
+							delta = 0f;
+						}
+					}
+				}
+				headingCorrection = ((HEADING_CORRECTION_FILTER - 1) * headingCorrection + delta) / HEADING_CORRECTION_FILTER;
+				val += headingCorrection;
 
 				float valRad = (float) (val / 180f * Math.PI);
 				lastValSin = (float) Math.sin(valRad);

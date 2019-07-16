@@ -402,7 +402,7 @@ public class OsmandMapTileView implements IMapDownloaderCallback {
 	public void setRotate(float rotate) {
 		if (isMapRotateEnabled()) {
 			float diff = MapUtils.unifyRotationDiff(rotate, getRotate());
-			if (Math.abs(diff) > 5) { // check smallest rotation
+			if (Math.abs(diff) > 1) { // check smallest rotation
 				animatedDraggingThread.startRotate(rotate);
 			}
 		}
