@@ -70,8 +70,8 @@ public class OsmAndLocationProvider implements SensorEventListener {
 
 	private static final float ACCURACY_FOR_GPX_AND_ROUTING = 50;
 
-	private static final float MAX_HEADING_CORRECTION = 25;
-	private static final float HEADING_CORRECTION_FILTER = 20;
+	private static final float MAX_HEADING_CORRECTION = 45;
+	private static final float HEADING_CORRECTION_FILTER = 150;
 
 	private static final int GPS_TIMEOUT_REQUEST = 0;
 	private static final int GPS_DIST_REQUEST = 0;

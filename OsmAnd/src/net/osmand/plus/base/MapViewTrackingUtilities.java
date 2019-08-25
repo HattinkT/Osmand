@@ -254,7 +254,7 @@ public class MapViewTrackingUtilities implements OsmAndLocationListener, IMapLoc
 		return location.hasBearing() &&
 				!smallSpeedForCompass &&
 				location.getBearing() != 0f &&
-				Math.abs(MapUtils.degreesDiff(location.getBearing(), heading)) > 25;
+				Math.abs(MapUtils.degreesDiff(location.getBearing(), heading)) > 45;
 	}
 
 	public static boolean isSmallSpeedForCompass(Location location) {
